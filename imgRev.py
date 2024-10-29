@@ -25,3 +25,5 @@ def ampDisReversion(dist, keyset, sqSum, shots, n):
     img = Image.fromarray(dist_Mat)
     # print(dist_Mat)
     return img
+
+# retrieve img from angle encoding
