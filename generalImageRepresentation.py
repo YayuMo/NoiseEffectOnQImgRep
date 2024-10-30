@@ -1,5 +1,6 @@
 from shutil import posix
 
+from matplotlib.pyplot import contour
 from networkx.generators import classic
 from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, transpile, assemble
 from qiskit.circuit.add_control import control
@@ -10,6 +11,8 @@ from qiskit.circuit.library import XGate, RYGate
 
 import numpy as np
 import math
+
+from skimage.exposure.exposure import intensity_range
 from tqdm import tqdm
 
 import matplotlib
@@ -132,6 +135,58 @@ def FTQR(image):
     pass
 
 # GQIR encoding
+def GQIR(image):
+    x= int(np.ceil(math.log(image.shape[0], 2)))
+    y = int(np.ceil(math.log(image.shape[1], 2)))
+    q = 8
+
+    color = QuantumRegister(q, 'color')
+    y_ax = QuantumRegister(y, 'y axis')
+    x_ax = QuantumRegister(x, 'x axis')
+    classic = ClassicalRegister(x + y + q, 'classic')
+    qc = QuantumCircuit(color, y_ax, x_ax, classic)
+
+    qc.id(color)
+    qc.h(x_ax)
+    qc.h(y_ax)
+    qc.barrier()
+    controls_ = []
+    for i, _ in enumerate(x_ax):
+        controls_.extend([x_ax[i]])
+    for i, _ in enumerate(y_ax):
+        controls_.extend([y_ax[i]])
+    for xi in range(image.shape[0]):
+        xi_bin = "{0:b}".format(xi).zfill(x_ax.size)
+        for i, bit in enumerate(xi_bin):
+            if not int(bit):
+                qc.x(x_ax[i])
+        qc.barrier()
+        for yi in range(image.shape[1]):
+            yi_bin = "{0:b}".format(yi).zfill(y_ax.size)
+            for i, bit in enumerate(yi_bin):
+                if not int(bit):
+                    qc.x(y_ax[i])
+            qc.barrier()
+            intensity_bin = "{0:b}".format(image[xi, yi]).zfill(len(color))
+            xg = XGate(None).control(len(controls_))
+            target = []
+            for i, bit in enumerate(intensity_bin):
+                if int(bit):
+                    qc.mcx(controls_, color[i])
+            qc.barrier()
+            for i, bit in enumerate(yi_bin):
+                if not int(bit):
+                    qc.x(y_ax[i])
+            qc.barrier()
+        for i, bit in enumerate(xi_bin):
+            if not int(bit):
+                qc.x(x_ax[i])
+        qc.barrier()
+
+    qc.measure(x_ax, range(x_ax.size))
+    qc.measure(y_ax, range(x_ax.size, x_ax.size + y_ax.size))
+    qc.measure(color, range(x_ax.size + y_ax.size, x_ax.size + y_ax.size + color.size))
+    return qc
 
 # MCRQI encoding -- RGB encoding
 def MCRQI(image):
@@ -214,6 +269,8 @@ def NEQR(image):
     qc.measure(range(qc.num_qubits), range(cr.size))
     return qc
 
+
+
 def imageOpen(imagePath, size, cmap):
     # read image and convert to gray scale
     img = Image.open(imagePath).convert(cmap)
@@ -223,14 +280,15 @@ def imageOpen(imagePath, size, cmap):
     return arr
 
 if __name__ == '__main__':
-    img = imageOpen('img/duck.png', 2, cmap='L')
+    img = imageOpen('img/duck.png', 256, cmap='L')
     # img = imageOpen('img/duck.png', 2, cmap='RGB')
     # print(img)
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
     # qc = FRQI(img)
+    qc = GQIR(img)
     # qc = MCRQI(img)
-    qc = NEQR(img)
+    # qc = NEQR(img)
     print(qc.depth())
     # qc.draw(output='mpl')
     # plt.show()
