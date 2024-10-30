@@ -1,9 +1,8 @@
-from shutil import posix
-
 from matplotlib.pyplot import contour
 from networkx.generators import classic
 from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, transpile, assemble
 from qiskit.circuit.add_control import control
+from qiskit.pulse import num_qubits
 from qiskit.visualization.pulse_v2.layouts import qubit_index_sort
 from qiskit_aer import Aer
 from qiskit.visualization import plot_distribution
@@ -91,7 +90,7 @@ def BRQI(image):
     qc.measure(list(reversed(range(qc.num_qubits))), list(range(classic.size)))
     return qc
 
-# FRQI encoding -- Angle QROM
+# FRQI encoding -- General Angle QROM
 def FRQI(image):
     input_im = image.copy().flatten()
     thetas = np.interp(input_im, (0, 256), (0, np.pi/2))
@@ -269,6 +268,67 @@ def NEQR(image):
     qc.measure(range(qc.num_qubits), range(cr.size))
     return qc
 
+# OQIM encoding
+def OQIM(image):
+    im_list = image.flatten()
+    ind_list = sorted(range(len(im_list)), key=lambda i: im_list[i])
+    max_index = max(ind_list)
+    # in angle: theta = intensity, phi = coordinate
+    thetas = np.interp(im_list, (0, 256), (0, np.pi/2))
+    phis = np.interp(range(len(im_list)), (0, len(im_list)), (0, np.pi/2))
+
+    num_ind_bits = int(np.ceil(math.log(len(im_list),2)))
+    if not num_ind_bits:
+        num_ind_bits = 1
+
+    O = QuantumRegister(num_ind_bits, 'o_reg')
+    c = QuantumRegister(1, 'c_reg')
+    p = QuantumRegister(1, 'p_reg')
+    cr = ClassicalRegister(O.size + c.size + p.size, 'cl_reg')
+
+    qc = QuantumCircuit(c, p, O, cr)
+    num_qubits = qc.num_qubits
+    input_im = image.copy().flatten()
+    qc.id(c)
+    qc.h(O)
+    qc.h(p)
+    controls_ = []
+    for i, _ in enumerate(O):
+        controls_.extend([O[i]])
+    for j, _ in enumerate(p):
+        controls_.extend([p[j]])
+
+    for i, (phi, theta) in enumerate(zip(phis, thetas)):
+        qubit_index_bin = "{0:b}".format(i).zfill(num_ind_bits)
+
+        for k, qub_ind in enumerate(qubit_index_bin):
+            if int(qub_ind):
+                qc.x(O[k])
+
+        for coord_or_intns in (0, 1):
+            if not coord_or_intns:
+                qc.mcry(theta=2 * theta,
+                        q_controls=controls_,
+                        q_target=c[0])
+
+            else:
+                qc.x(p)
+                qc.mcry(theta=2 * phi,
+                        q_controls=controls_,
+                        q_target=c[0])
+                if i != len(thetas) - 1:
+                    qc.x(p)
+
+        if i != len(thetas) - 1:
+            for k, qub_ind in enumerate(qubit_index_bin):
+                if int(qub_ind):
+                    qc.x(O[k])
+
+    qc.barrier()
+    qc.measure(list(reversed(range(qc.num_qubits))), list(range(cr.size)))
+
+    return qc
+
 
 
 def imageOpen(imagePath, size, cmap):
@@ -286,9 +346,10 @@ if __name__ == '__main__':
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
     # qc = FRQI(img)
-    qc = GQIR(img)
+    # qc = GQIR(img)
     # qc = MCRQI(img)
     # qc = NEQR(img)
+    qc = OQIM(img)
     print(qc.depth())
     # qc.draw(output='mpl')
     # plt.show()

@@ -8,19 +8,21 @@ import cv2
 from imgRev import ampDisReversion, generateKeySet
 from qiskit_backend import constructBackend
 
+IMG_PATH = 'img/I08.png'
+
 def experiments(experSettings):
     vec = image2Arr(imagePath=experSettings['originalImgPath'], size=experSettings['resize'])
     shots = experSettings['shots']
     result_home = experSettings['home_path']
     # create image dict list
     imgDictList = [{
-        'img_path': 'img/duck.png',
+        'img_path': IMG_PATH,
         'title': 'Original'
     }]
 
     # create diff image dict list
     imgDiffList = [{
-        'img_path': 'img/duck.png',
+        'img_path': IMG_PATH,
         'title': 'Original'
     }]
     if experSettings['encoding'] == 'Amplitude Encoding':
@@ -93,7 +95,7 @@ if __name__ == '__main__':
         'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
         'shots': 20000,
         'resize': 32,
-        'originalImgPath':'img/duck.png',
+        'originalImgPath': IMG_PATH,
         'home_path': 'result/'
     }
     imgDictList,imgDiffList = experiments(experiment_settings)

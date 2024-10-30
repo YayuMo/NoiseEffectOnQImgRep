@@ -50,10 +50,10 @@ def constructAmplitudeDampingNoiseModel(param_meas, qb_nums):
     qerror_meas = amplitude_damping_error(param_meas)
     # build noise model
     noise_model = NoiseModel()
-    # noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
-    sampleList = randomQubitSeriesGenerator(0.25, qb_nums)
-    for sample in sampleList:
-        noise_model.add_quantum_error(qerror_meas, 'measure', [sample])
+    noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
+    # sampleList = randomQubitSeriesGenerator(0.25, qb_nums)
+    # for sample in sampleList:
+    #     noise_model.add_quantum_error(qerror_meas, 'measure', [sample])
     return noise_model
 
 # Phase Damping Model on phase gate
