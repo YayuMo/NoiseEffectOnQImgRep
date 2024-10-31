@@ -1,6 +1,5 @@
-from matplotlib.pyplot import contour
-from networkx.generators import classic
 from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, transpile, assemble
+from qiskit.quantum_info.operators import Operator
 from qiskit.circuit.add_control import control
 from qiskit.pulse import num_qubits
 from qiskit.visualization.pulse_v2.layouts import qubit_index_sort
@@ -11,7 +10,6 @@ from qiskit.circuit.library import XGate, RYGate
 import numpy as np
 import math
 
-from skimage.exposure.exposure import intensity_range
 from tqdm import tqdm
 
 import matplotlib
@@ -128,10 +126,20 @@ def FRQI(image):
 # FTQR encoding
 def FTQR(image):
     input_im = image.copy().flatten()
-    theta = input_im.theta
-    v = np.zeros(4)
+    thetas = input_im.copy()
+    coord_q_num = int(np.ceil(math.log(len(input_im), 2)))
+    v = thetas.copy()
+    ph = np.e ** (2 * np.pi * v * 1j / 1024)
+    S = np.diag(ph)
+    SOp = Operator(S)
 
-    pass
+    c = QuantumRegister(coord_q_num, 'coordinates')
+    cl = ClassicalRegister(coord_q_num, 'cl_reg')
+    qc = QuantumCircuit(c, cl)
+    qc.h(c)
+    qc.append(SOp, c)
+
+    return qc
 
 # GQIR encoding
 def GQIR(image):
@@ -398,17 +406,18 @@ def imageOpen(imagePath, size, cmap):
     return arr
 
 if __name__ == '__main__':
-    img = imageOpen('img/duck.png', 256, cmap='L')
+    img = imageOpen('img/duck.png', 64, cmap='L')
     # img = imageOpen('img/duck.png', 2, cmap='RGB')
     # print(img)
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
     # qc = FRQI(img)
+    qc = FTQR(img)
     # qc = GQIR(img)
     # qc = MCRQI(img)
     # qc = NEQR(img)
     # qc = OQIM(img)
-    qc = QSMC(img)
+    # qc = QSMC(img)
     print(qc.depth())
     # qc.draw(output='mpl')
     # plt.show()
