@@ -329,7 +329,65 @@ def OQIM(image):
 
     return qc
 
+# QSMC_QSNC encoding
+def QSMC(image):
+    # w_bits = int(np.ceil(math.log(image.size[1], 2)))
+    # n_bits = int(np.ceil(math.log(image.size[0], 2)))
 
+    im_list = image.flatten()
+    ind_list = sorted(range(len(im_list)), key=lambda i: im_list[i])
+    max_index = max(ind_list)
+    thetas = np.interp(im_list, (0, 256), (0, np.pi/2))
+    phis = np.interp(range(len(im_list)), (0, len(im_list)), (0, np.pi/2))
+
+    num_ind_bits = int(np.ceil(math.log(len(im_list),2)))
+
+    O = QuantumRegister(num_ind_bits, 'o_reg')
+    color = QuantumRegister(1, 'color')
+    coordinate = QuantumRegister(1, 'coordinate')
+    cr = ClassicalRegister(O.size + color.size + coordinate.size, 'cl_reg')
+
+    qc = QuantumCircuit(color, coordinate, O, cr)
+    num_qubits = qc.num_qubits
+    input_im = image.copy().flatten()
+    qc.id(color)
+    qc.id(coordinate)
+    qc.h(O)
+    controls_ = []
+
+    for i, _ in enumerate(O):
+        controls_.extend([O[i]])
+
+    for i, (phi, theta) in enumerate(zip(phis, thetas)):
+        qubit_index_bin = "{0:b}".format(i).zfill(num_ind_bits)
+
+        for k, qub_ind in enumerate(qubit_index_bin):
+            if int(qub_ind):
+                qc.x(O[k])
+
+        qc.barrier()
+
+        for coord_or_intns in (0, 1):
+            if not coord_or_intns:
+                qc.mcry(theta = 2 * theta,
+                        q_controls=controls_,
+                        q_target=color[0])
+            else:
+                qc.mcry(theta = 2 * phi,
+                        q_controls=controls_,
+                        q_target=coordinate[0])
+
+        qc.barrier()
+
+        if i != len(thetas) - 1:
+            for k, qub_ind in enumerate(qubit_index_bin):
+                if int(qub_ind):
+                    qc.x(O[k])
+
+        qc.barrier()
+
+    qc.measure(range(qc.num_qubits), range(cr.size))
+    return qc
 
 def imageOpen(imagePath, size, cmap):
     # read image and convert to gray scale
@@ -349,7 +407,8 @@ if __name__ == '__main__':
     # qc = GQIR(img)
     # qc = MCRQI(img)
     # qc = NEQR(img)
-    qc = OQIM(img)
+    # qc = OQIM(img)
+    qc = QSMC(img)
     print(qc.depth())
     # qc.draw(output='mpl')
     # plt.show()
