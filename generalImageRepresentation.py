@@ -13,6 +13,9 @@ import math
 from tqdm import tqdm
 
 import matplotlib
+
+from circuits import simulate
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -209,7 +212,8 @@ def MCRQI(image):
     for i in range(xqubits + yqubits):
         qc.h(i)
 
-    for layer_num, input_im in enumerate(image.T):
+    print("circuit generating...")
+    for layer_num, input_im in tqdm(enumerate(image.T)):
         input_im = input_im.flatten()
         input_im = np.interp(input_im, (0, 255), (0, np.pi/2))
 
@@ -242,7 +246,47 @@ def MCRQI(image):
     for i in range(xqubits + yqubits + 3):
         qc.measure(i, i)
 
-    return qc
+    return qc, qc.num_qubits
+
+# MCRQI Rev
+def Rev_MCRQI(image, counts, to_print=True):
+    output_ims = []
+    for layer_num, input_im in enumerate(image.T):
+        input_im = input_im.flatten()
+        nums = []
+        for iter in range(len(input_im)):
+            flag = 0
+            num = []
+            for item in counts.items():
+                if int(item[0][3:], 2) == iter:
+                    num.append((int(item[0][layer_num], 2), item[1]))
+            nums.append(num)
+        for l, num in enumerate(nums):
+            my_set = {x[0] for x in num}
+            nums[l] = [(i, sum(x[1] for x in num if x[0] == i)) for i in my_set]
+        colors = []
+        # for index in range(len(nums)):
+        #     if nums[index] == []:
+        #         nums[index] = [(0, 0)]
+        for num in nums:
+            if len(num) == 2:
+                if num[0][0] == 0:
+                    color = np.arccos((num[0][1] / (num[0][1] + num[1][1])) ** (1 / 2))
+                    colors.append(color)
+                else:
+                    color = np.arccos((num[1][1] / (num[0][1] + num[1][1])) ** (1 / 2))
+                    colors.append(color)
+            else:
+                if num[0][0] == 0:
+                    colors.append(0)
+                else:
+                    colors.append(np.pi / 2)
+        output_im = np.interp(colors, (0, np.pi / 2), (0, 255)).astype(int)
+        if to_print:
+            print(output_im, '\n', (image.T)[layer_num].copy().flatten())
+        output_ims.append(output_im.reshape(image[:, :, 0].shape))
+
+    return np.array(output_ims).T
 
 # NEQR encoding -- QRAM and QROM
 def NEQR(image):
@@ -400,24 +444,76 @@ def QSMC(image):
 def imageOpen(imagePath, size, cmap):
     # read image and convert to gray scale
     img = Image.open(imagePath).convert(cmap)
+    # img = Image.open(imagePath)
     if size != 'NoResize':
         img = img.resize((size, size))
     arr = np.array(img)
     return arr
 
+# random image generate
+def imageGenerate(resize):
+    image = np.zeros((resize, resize, 3))
+    image[:, :, 0] = np.array(
+        [255, 255, 255, 255, 255, 255, 255, 255,
+         255, 0, 255, 255, 255, 255, 0, 255,
+         255, 0, 255, 255, 255, 255, 0, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         0, 255, 255, 255, 255, 255, 255, 0,
+         255, 0, 255, 255, 255, 255, 0, 255,
+         255, 255, 0, 0, 0, 0, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255]).reshape(resize, resize)
+
+    image[:, :, 1] = np.array(
+        [255, 255, 255, 255, 255, 255, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         0, 255, 255, 0, 0, 255, 255, 0,
+         255, 0, 255, 255, 255, 255, 0, 255,
+         255, 255, 0, 0, 0, 0, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255]).reshape(resize, resize)
+
+    image[:, :, 2] = np.array(
+        [255, 255, 255, 255, 255, 255, 255, 255,
+         255, 0, 255, 255, 255, 255, 0, 255,
+         255, 0, 255, 255, 255, 255, 0, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         255, 255, 255, 0, 0, 255, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255,
+         255, 255, 255, 255, 255, 255, 255, 255]).reshape(resize, resize)
+
+    return image
+
 if __name__ == '__main__':
-    img = imageOpen('img/duck.png', 64, cmap='L')
-    # img = imageOpen('img/duck.png', 2, cmap='RGB')
-    # print(img)
+    # img = imageOpen('img/duck.png', 32, cmap='L')
+    # img = imageOpen('img/highres.jpg', 32, cmap='RGB')
+    img = imageGenerate(32)
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
     # qc = FRQI(img)
-    qc = FTQR(img)
+    # qc = FTQR(img)
     # qc = GQIR(img)
-    # qc = MCRQI(img)
+    qc, n = MCRQI(img)
     # qc = NEQR(img)
     # qc = OQIM(img)
     # qc = QSMC(img)
-    print(qc.depth())
+    # print(qc.depth())
     # qc.draw(output='mpl')
-    # plt.show()
+    shots = 1024
+    print(n)
+    aer_sim = Aer.get_backend('aer_simulator')
+    t_qc = transpile(qc, aer_sim)
+    # qobj = assemble(t_qc, shots = shots)
+    # result = aer_sim.run(qobj).result()
+    # counts = result.get_counts(qc)
+    # print(result)
+    dist = simulate(t_qc, shots, aer_sim)
+    print(len(dist))
+
+    img_rev = Rev_MCRQI(img, dist, to_print=False)
+    plt.subplot(1,2,1)
+    plt.imshow(img)
+    plt.subplot(1,2,2)
+    plt.imshow(img_rev)
+    plt.show()

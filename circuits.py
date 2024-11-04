@@ -145,7 +145,10 @@ def simulate(qc, shots, backend):
     sampler = Sampler(backend=backend)
     sampler.options.default_shots = shots
     result = sampler.run([qc]).result()
-    dist = result[0].data.meas.get_counts()
+    try:
+        dist = result[0].data.meas.get_counts()
+    except:
+        dist = result[0].data.c.get_counts()
     # print(dist)
     # plot_distribution(dist)
     # plt.show()
