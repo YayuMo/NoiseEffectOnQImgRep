@@ -61,6 +61,6 @@ def QRAM_circuit(n, m):
 
 if __name__ == '__main__':
 
-    circuit = QRAM_circuit(3, 3)
+    circuit = QRAM_circuit(2, 2)
     circuit.draw(output="mpl")
     plt.show()

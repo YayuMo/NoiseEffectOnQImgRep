@@ -124,7 +124,7 @@ def quamEncoding(imgArr):
     # print(norm)
     return qc, n
 
-# QRAM
+# Efficiet QRAM
 def qramEncoding(imgArr):
     n = int(math.log(len(imgArr), 2))
     if n < 8:
@@ -134,7 +134,7 @@ def qramEncoding(imgArr):
     # qb_num = n+m
     return qc
 
-# Angle QRAM - FIQR
+# Angle QRAM - FRQI
 
 # Improved QRAM
 
@@ -156,6 +156,7 @@ def simulate(qc, shots, backend):
 
 if __name__ == '__main__':
     imgArr = np.array([0, 125, 200, 255])
+    # imgArr = np.array([200, 255])
     # imgArr = np.array([10])
     # print(basisEncoding(imgArr))
     # qc = angleEncodingCircuit(imgArr)
@@ -166,6 +167,7 @@ if __name__ == '__main__':
     qc = qramEncoding(imgArr)
     print(qc.num_qubits)
     # qc = transpile(qc, qasm)
+    # qc.draw()
     qc.draw(output='mpl')
     # qc,sqSum, n = amplitudeEncoding(imgArr)
     # shots = 1024

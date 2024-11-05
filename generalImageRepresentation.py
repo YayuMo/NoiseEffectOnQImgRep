@@ -44,7 +44,7 @@ def BRQI(image):
     classic = ClassicalRegister(1 + w_bits + h_bits + color_n_b, 'classic')
     qc = QuantumCircuit(color, y_ax, x_ax, bitplane_q, classic)
 
-    qc.id(color)
+    # qc.id(color)
     qc.h(x_ax)
     qc.h(y_ax)
     qc.h(bitplane_q)
@@ -134,7 +134,7 @@ def FRQI(image):
     cr = ClassicalRegister(O.size + c.size, "cl_reg")
 
     qc_image = QuantumCircuit(c, O, cr)
-    qc_image.id(c)
+    # qc_image.id(c)
     qc_image.h(O)
 
     controls_ = []
@@ -221,7 +221,7 @@ def GQIR(image):
     classic = ClassicalRegister(x + y + q, 'classic')
     qc = QuantumCircuit(color, y_ax, x_ax, classic)
 
-    qc.id(color)
+    # qc.id(color)
     qc.h(x_ax)
     qc.h(y_ax)
     qc.barrier()
@@ -367,7 +367,7 @@ def NEQR(image):
     qc = QuantumCircuit(intensity, indx, cr)
     num_qubits = qc.num_qubits
     input_im = image.copy().flatten()
-    qc.id(intensity)
+    # qc.id(intensity)
     qc.h(indx)
     for i, pixel in enumerate(input_im):
         pixel_bin = "{0:b}".format(pixel).zfill(len(intensity))
@@ -423,7 +423,7 @@ def OQIM(image):
     qc = QuantumCircuit(c, p, O, cr)
     num_qubits = qc.num_qubits
     input_im = image.copy().flatten()
-    qc.id(c)
+    # qc.id(c)
     qc.h(O)
     qc.h(p)
     controls_ = []
@@ -522,8 +522,8 @@ def QSMC(image):
     cr = ClassicalRegister(O.size + color.size + coordinate.size, "cl_reg")
 
     qc_image = QuantumCircuit(color, coordinate, O, cr)
-    qc_image.id(color)
-    qc_image.id(coordinate)
+    # qc_image.id(color)
+    # qc_image.id(coordinate)
     qc_image.h(O)
     controls_ = []
     for i, _ in enumerate(O):
@@ -641,14 +641,14 @@ def imageGenerate(size, prop):
     return image
 
 if __name__ == '__main__':
-    img = imageOpen('img/duck.png', 32, cmap='L')
+    img = imageOpen('img/duck.png', 2, cmap='L')
     # img = np.random.uniform(low=0, high=255, size=(16, 16)).astype(int)
-    # img = imageOpen('img/duck.png', 32, cmap='RGB')
+    # img = imageOpen('img/duck.png', 2, cmap='RGB')
     # img = imageGenerate(8, 10)
     # print(img)
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
-    qc = BRQI(img)
-    # qc = FRQI(img)
+    # qc = BRQI(img)
+    qc = FRQI(img)
     # qc = FTQR(img)
     # qc = GQIR(img)
     # qc, n = MCRQI(img)
@@ -656,29 +656,29 @@ if __name__ == '__main__':
     # qc = OQIM(img)
     # qc = QSMC(img)
     # print(qc.depth())
-    # qc.draw(output='mpl')
-    shots = 20000
+    qc.decompose().draw(output='mpl')
+    # shots = 20000
     # print(n)
-    aer_sim = Aer.get_backend('aer_simulator')
-    t_qc = transpile(qc, aer_sim)
-    qobj = assemble(t_qc, shots = shots)
-    result = aer_sim.run(qobj).result()
-    counts = result.get_counts(qc)
+    # aer_sim = Aer.get_backend('aer_simulator')
+    # t_qc = transpile(qc, aer_sim)
+    # qobj = assemble(t_qc, shots = shots)
+    # result = aer_sim.run(qobj).result()
+    # counts = result.get_counts(qc)
     # print(result)
     # dist = simulate(t_qc, shots, aer_sim)
     # print(len(dist))
 
-    img_rev = Rev_BRQI(img, counts)
+    # img_rev = Rev_BRQI(img, counts)
     # img_rev = Rev_MCRQI(img, counts, to_print=False)
     # img_rev = Rev_FRQI(img, counts)
     # img_rev = Rev_NEQR(img, counts)
     # img_rev = Rev_OQIM(img, counts)
     # img_rev = Rev_QSMC(img, counts)
 
-    plt.subplot(1,2,1)
-    plt.title('Original Image')
-    plt.imshow(img, cmap='gray')
-    plt.subplot(1,2,2)
-    plt.title('Quantized Image')
-    plt.imshow(img_rev, cmap='gray')
+    # plt.subplot(1,2,1)
+    # plt.title('Original Image')
+    # plt.imshow(img, cmap='gray')
+    # plt.subplot(1,2,2)
+    # plt.title('Quantized Image')
+    # plt.imshow(img_rev, cmap='gray')
     plt.show()
