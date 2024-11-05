@@ -3,6 +3,7 @@ from qiskit_aer import Aer
 from qiskit_ibm_runtime import QiskitRuntimeService
 
 from circuits import *
+from generalImageRepresentation import *
 from imageUtil import image2Arr
 from tqdm import tqdm
 
@@ -68,6 +69,61 @@ def circuitEvaluation(imgPath, imgSizeList, encoding, backend):
             qc_depths.append(qc.depth())
             qc_nums.append(qc.num_qubits)
 
+    elif encoding == 'BRQI':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = BRQI(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'FRQI':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = FRQI(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'FTQR':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = FTQR(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'GQIR':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = GQIR(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'MCRQI':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'RGB')
+            qc,n = MCRQI(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'NEQR':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = NEQR(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'OQIM':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = OQIM(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
+
+    elif encoding == 'QSMC':
+        for size in tqdm(imgSizeList):
+            vec = imageOpen(imgPath, size, 'L')
+            qc = QSMC(vec)
+            qc_depths.append(qc.depth())
+            qc_nums.append(qc.num_qubits)
 
     # plt.subplot(1,2,1)
     # plt.plot(imgSizeList, qc_depths, color = 'red', linestyle='-', label='QC Depth', marker='*')
@@ -94,9 +150,18 @@ if __name__ == '__main__':
     amp_depths, amp_nums = circuitEvaluation(imgPath, imgSizeList, encoding='Amplitude Encoding', backend=hardware)
     dense_depths, dense_nums = circuitEvaluation(imgPath, imgSizeList, encoding='Dense Angle Encoding', backend=hardware)
     quam_depths, quam_nums = circuitEvaluation(imgPath, imgSizeList, encoding='QUAM Encoding', backend=hardware)
-    basis_depths, basis_nums = circuitEvaluation(imgPath, imgSizeList, encoding='Basis Encoding', backend=sim)
-    angle_depths, angle_nums = circuitEvaluation(imgPath, imgSizeList, encoding='Angle Encoding', backend=sim)
-    qram_depths, qram_nums = circuitEvaluation(imgPath, imgSizeList, encoding='QRAM Encoding', backend=sim)
+    basis_depths, basis_nums = circuitEvaluation(imgPath, imgSizeList, encoding='Basis Encoding', backend=hardware) # sim
+    angle_depths, angle_nums = circuitEvaluation(imgPath, imgSizeList, encoding='Angle Encoding', backend=hardware)
+    qram_depths, qram_nums = circuitEvaluation(imgPath, imgSizeList, encoding='QRAM Encoding', backend=hardware)
+
+    brqi_depths, brqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='BRQI', backend=hardware)
+    frqi_depths, frqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FRQI', backend=hardware)
+    ftqr_depths, ftqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FTQR', backend=hardware)
+    gqir_depths, gqir_nums = circuitEvaluation(imgPath, imgSizeList, encoding='GQIR', backend=hardware)
+    mcrqi_depths, mcrqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='MCRQI', backend=hardware)
+    neqr_depths, neqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='NEQR', backend=hardware)
+    oqim_depths, oqim_nums = circuitEvaluation(imgPath, imgSizeList, encoding='OQIM', backend=hardware)
+    qsmc_depths, qsmc_nums = circuitEvaluation(imgPath, imgSizeList, encoding='QSMC', backend=hardware)
 
     plt.subplot(1,2,1)
     plt.plot(imgSizeList, basis_depths, color = 'red', linestyle='-', label='Basis Encoding', marker='*')
@@ -105,6 +170,16 @@ if __name__ == '__main__':
     plt.plot(imgSizeList, amp_depths, color = 'yellow', linestyle='-', label='Amplitude Encoding', marker='^')
     plt.plot(imgSizeList, quam_depths, color = 'green', linestyle='-', label='QUAM Encoding', marker='o')
     plt.plot(imgSizeList, qram_depths, color = 'black', linestyle='-', label='QRAM Encoding', marker='+')
+
+    plt.plot(imgSizeList, brqi_depths, color = 'pink', linestyle='-', label='BRQI', marker='p')
+    plt.plot(imgSizeList, frqi_depths, color = 'cyan', linestyle='-', label='FRQI', marker='h')
+    plt.plot(imgSizeList, ftqr_depths, color = 'brown', linestyle='-', label='FTQR', marker='v')
+    plt.plot(imgSizeList, gqir_depths, color = 'gray', linestyle='-', label='GQIR', marker='<')
+    plt.plot(imgSizeList, mcrqi_depths, color = 'orange', linestyle='-', label='MCRQI', marker='>')
+    plt.plot(imgSizeList, neqr_depths, color = 'darkred', linestyle='-', label='NEQR', marker='1')
+    plt.plot(imgSizeList, oqim_depths, color = 'olive', linestyle='-', label='OQIM', marker='2')
+    plt.plot(imgSizeList, qsmc_depths, color = 'gold', linestyle='-', label='QSMC', marker='3')
+
     plt.legend(loc='best')
     plt.xlabel('Image side size')
     plt.ylabel('circuit depth')
@@ -118,6 +193,16 @@ if __name__ == '__main__':
     plt.plot(imgSizeList, amp_nums, color='yellow', linestyle='-', label='Amplitude Encoding', marker='^')
     plt.plot(imgSizeList, quam_nums, color='green', linestyle='-', label='QUAM Encoding', marker='o')
     plt.plot(imgSizeList, qram_nums, color = 'black', linestyle='-', label='QRAM Encoding', marker='+')
+
+    plt.plot(imgSizeList, brqi_nums, color = 'pink', linestyle='-', label='BRQI', marker='p')
+    plt.plot(imgSizeList, frqi_nums, color = 'cyan', linestyle='-', label='FRQI', marker='h')
+    plt.plot(imgSizeList, ftqr_nums, color = 'brown', linestyle='-', label='FTQR', marker='v')
+    plt.plot(imgSizeList, gqir_nums, color = 'gray', linestyle='-', label='GQIR', marker='<')
+    plt.plot(imgSizeList, mcrqi_nums, color = 'orange', linestyle='-', label='MCRQI', marker='>')
+    plt.plot(imgSizeList, neqr_nums, color = 'darkred', linestyle='-', label='NEQR', marker='1')
+    plt.plot(imgSizeList, oqim_nums, color = 'olive', linestyle='-', label='OQIM', marker='2')
+    plt.plot(imgSizeList, qsmc_nums, color = 'gold', linestyle='-', label='QSMC', marker='3')
+
     plt.legend(loc='best')
     plt.xlabel('Image side size')
     plt.ylabel('number of utilized qubits')
