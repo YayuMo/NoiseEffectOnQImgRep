@@ -641,7 +641,7 @@ def imageGenerate(size, prop):
     return image
 
 if __name__ == '__main__':
-    img = imageOpen('img/duck.png', 2, cmap='L')
+    img = imageOpen('img/duck.png', 32, cmap='L')
     # img = np.random.uniform(low=0, high=255, size=(16, 16)).astype(int)
     # img = imageOpen('img/duck.png', 2, cmap='RGB')
     # img = imageGenerate(8, 10)
@@ -649,14 +649,14 @@ if __name__ == '__main__':
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
     # qc = FRQI(img)
-    # qc = FTQR(img)
+    qc = FTQR(img)
     # qc = GQIR(img)
     # qc, n = MCRQI(img)
     # qc = NEQR(img)
     # qc = OQIM(img)
-    qc = QSMC(img)
-    # print(qc.depth())
-    qc.draw(output='mpl')
+    # qc = QSMC(img)
+    print(qc.decompose().depth())
+    # qc.draw(output='mpl')
     # shots = 20000
     # print(n)
     # aer_sim = Aer.get_backend('aer_simulator')
@@ -681,4 +681,4 @@ if __name__ == '__main__':
     # plt.subplot(1,2,2)
     # plt.title('Quantized Image')
     # plt.imshow(img_rev, cmap='gray')
-    plt.show()
+    # plt.show()
