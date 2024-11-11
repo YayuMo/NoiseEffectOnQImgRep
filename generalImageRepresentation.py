@@ -163,7 +163,7 @@ def FRQI(image):
 
     qc_image.measure(list(reversed(range(qc_image.num_qubits))), list(range(cr.size)))
 
-    return qc_image
+    return qc_image, qc_image.num_qubits
 
 # FRQI Rev
 def Rev_FRQI(image, counts):
@@ -640,6 +640,14 @@ def imageGenerate(size, prop):
 
     return image
 
+# simulate model 2
+def simulate2(qc, shots, backend):
+    t_qc = transpile(qc, backend)
+    qobj = assemble(t_qc, shots = shots)
+    result = backend.run(qobj).result()
+    counts = result.get_counts(qc)
+    return counts
+
 if __name__ == '__main__':
     img = imageOpen('img/duck.png', 32, cmap='L')
     # img = np.random.uniform(low=0, high=255, size=(16, 16)).astype(int)
@@ -648,37 +656,37 @@ if __name__ == '__main__':
     # print(img)
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
-    # qc = FRQI(img)
-    qc = FTQR(img)
+    qc,n = FRQI(img)
+    # qc = FTQR(img)
     # qc = GQIR(img)
     # qc, n = MCRQI(img)
     # qc = NEQR(img)
     # qc = OQIM(img)
     # qc = QSMC(img)
-    print(qc.decompose().depth())
+    print(qc.depth())
     # qc.draw(output='mpl')
-    # shots = 20000
+    shots = 20000
     # print(n)
-    # aer_sim = Aer.get_backend('aer_simulator')
-    # t_qc = transpile(qc, aer_sim)
-    # qobj = assemble(t_qc, shots = shots)
-    # result = aer_sim.run(qobj).result()
-    # counts = result.get_counts(qc)
+    aer_sim = Aer.get_backend('aer_simulator')
+    t_qc = transpile(qc, aer_sim)
+    qobj = assemble(t_qc, shots = shots)
+    result = aer_sim.run(qobj).result()
+    counts = result.get_counts(qc)
     # print(result)
     # dist = simulate(t_qc, shots, aer_sim)
     # print(len(dist))
 
     # img_rev = Rev_BRQI(img, counts)
     # img_rev = Rev_MCRQI(img, counts, to_print=False)
-    # img_rev = Rev_FRQI(img, counts)
+    img_rev = Rev_FRQI(img, counts)
     # img_rev = Rev_NEQR(img, counts)
     # img_rev = Rev_OQIM(img, counts)
     # img_rev = Rev_QSMC(img, counts)
 
-    # plt.subplot(1,2,1)
-    # plt.title('Original Image')
-    # plt.imshow(img, cmap='gray')
-    # plt.subplot(1,2,2)
-    # plt.title('Quantized Image')
-    # plt.imshow(img_rev, cmap='gray')
-    # plt.show()
+    plt.subplot(1,2,1)
+    plt.title('Original Image')
+    plt.imshow(img, cmap='gray')
+    plt.subplot(1,2,2)
+    plt.title('Quantized Image')
+    plt.imshow(img_rev, cmap='gray')
+    plt.show()

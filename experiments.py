@@ -91,8 +91,8 @@ def experiments(experSettings):
             cmap='RGB'
         )
         qc, n = MCRQI(img)
-        ideal_sim = constructBackend('statevector', 0, n)
-        distIdeal = simulate(qc, shots, ideal_sim)
+        ideal_sim = constructBackend('aer', 0, n)
+        distIdeal = simulate2(qc, shots, ideal_sim)
         imgEncoded = Rev_MCRQI(img, distIdeal, to_print=False)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
         imgDictList.append({
@@ -108,7 +108,69 @@ def experiments(experSettings):
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
             noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
-            dist = simulate(qc, shots, noise_sim)
+            dist = simulate2(qc, shots, noise_sim)
+            imgProcessed = Rev_MCRQI(img, dist, to_print=False)
+            imgProcessedPath = imageSave(
+                img = imgProcessed,
+                prefix='ampDamp',
+                resultHome=result_home,
+                params=param
+            )
+
+            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            imgDictList.append({
+                'img_path': imgProcessedPath,
+                'title': 'param = ' + str(param),
+                'param': param,
+                'mse': mse,
+                'ssim': ssim
+            })
+
+            # create diff images
+            processed_img = cv2.imread(imgProcessedPath)
+            encoded_img = cv2.imread(encodedImgPath)
+            pixel_diff = cv2.absdiff(processed_img, encoded_img)
+            img_diff = Image.fromarray(pixel_diff)
+            # print(img_diff)
+            img_diff_path = imageSave(
+                img = img_diff,
+                prefix='Diff',
+                resultHome=result_home,
+                params=param
+            )
+            imgDiffList.append({
+                'img_path': img_diff_path,
+                'title': 'param = ' + str(param),
+                'param': param
+            })
+
+        pass
+
+    elif experSettings['encoding'] == 'FRQI':
+        img = imageOpen(
+            imagePath=IMG_PATH,
+            size=experSettings['resize'],
+            cmap='L'
+        )
+        qc, n = FRQI(img)
+        ideal_sim = constructBackend('aer', 0, n)
+        distIdeal = simulate2(qc, shots, ideal_sim)
+        imgEncoded = Rev_FRQI(img, distIdeal)
+        encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
+        imgDictList.append({
+            'img_path': encodedImgPath,
+            'title': 'Encoded Image'
+        })
+
+        imgDiffList.append({
+            'img_path': encodedImgPath,
+            'title': 'Encoded Image'
+        })
+
+        # experiment on noise simulator
+        for param in tqdm(experSettings['modelParams']):
+            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
+            dist = simulate2(qc, shots, noise_sim)
             imgProcessed = Rev_MCRQI(img, dist, to_print=False)
             imgProcessedPath = imageSave(
                 img = imgProcessed,
@@ -164,13 +226,22 @@ if __name__ == '__main__':
         'noiseModel': 'Amplitude Damping',
         'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
         'shots': 20000,
-        'resize': 32,
+        'resize': 8,
         'originalImgPath': IMG_PATH,
-        'home_path': 'result/AmpEn_AmpDam/',
+        'home_path': 'result/MCRQI_AmpDam/',
     }
 
+    experiment_settings_FRQI = {
+        'encoding': 'FRQI',
+        'noiseModel': 'Amplitude Damping',
+        'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
+        'shots': 20000,
+        'resize': 8,
+        'originalImgPath': IMG_PATH,
+        'home_path': 'result/FRQI_AmpDam/',
+    }
 
-    imgDictList,imgDiffList = experiments(experiment_settings_MCRQI)
+    imgDictList,imgDiffList = experiments(experiment_settings_FRQI)
     imgPlot(imgDictList)
     imgPlot(imgDiffList)
     plotEvalCurve(imgDictList)
