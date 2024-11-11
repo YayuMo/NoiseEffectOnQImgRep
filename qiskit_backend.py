@@ -9,7 +9,7 @@ def constructBackend(method, params, qb_nums):
         # ideal statevector simulator
         return Aer.get_backend('statevector_simulator')
     elif (method == 'aer'):
-        return Aer.get_backend('aer_simulator')
+        return AerSimulator()
     elif (method == 'qasm'):
         # noisy qasm simulator
         return Aer.get_backend('qasm_simulator')

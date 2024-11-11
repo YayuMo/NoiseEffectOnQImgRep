@@ -3,7 +3,7 @@ from qiskit.quantum_info.operators import Operator
 from qiskit.circuit.add_control import control
 from qiskit.pulse import num_qubits
 from qiskit.visualization.pulse_v2.layouts import qubit_index_sort
-from qiskit_aer import Aer
+from qiskit_aer import Aer, AerSimulator
 from qiskit.visualization import plot_distribution
 from qiskit.circuit.library import XGate, RYGate
 
@@ -667,13 +667,13 @@ if __name__ == '__main__':
     # qc.draw(output='mpl')
     shots = 20000
     # print(n)
-    aer_sim = Aer.get_backend('aer_simulator')
+    aer_sim = AerSimulator()
     t_qc = transpile(qc, aer_sim)
     qobj = assemble(t_qc, shots = shots)
     result = aer_sim.run(qobj).result()
     counts = result.get_counts(qc)
     # print(result)
-    # dist = simulate(t_qc, shots, aer_sim)
+    dist = simulate(t_qc, shots, aer_sim)
     # print(len(dist))
 
     # img_rev = Rev_BRQI(img, counts)
