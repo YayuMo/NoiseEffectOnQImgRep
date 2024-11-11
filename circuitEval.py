@@ -156,7 +156,7 @@ if __name__ == '__main__':
 
     brqi_depths, brqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='BRQI', backend=hardware)
     frqi_depths, frqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FRQI', backend=hardware)
-    # ftqr_depths, ftqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FTQR', backend=sim)
+    ftqr_depths, ftqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FTQR', backend=sim)
     gqir_depths, gqir_nums = circuitEvaluation(imgPath, imgSizeList, encoding='GQIR', backend=hardware)
     mcrqi_depths, mcrqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='MCRQI', backend=hardware)
     neqr_depths, neqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='NEQR', backend=sim)
@@ -173,7 +173,7 @@ if __name__ == '__main__':
 
     plt.plot(imgSizeList, brqi_depths, color = 'pink', linestyle='-', label='BRQI', marker='p')
     plt.plot(imgSizeList, frqi_depths, color = 'cyan', linestyle='-', label='FRQI', marker='h')
-    # plt.plot(imgSizeList, ftqr_depths, color = 'brown', linestyle='-', label='FTQR', marker='v')
+    plt.plot(imgSizeList, ftqr_depths, color = 'brown', linestyle='-', label='FTQR', marker='v')
     plt.plot(imgSizeList, gqir_depths, color = 'gray', linestyle='-', label='GQIR', marker='<')
     plt.plot(imgSizeList, mcrqi_depths, color = 'orange', linestyle='-', label='MCRQI', marker='>')
     plt.plot(imgSizeList, neqr_depths, color = 'darkred', linestyle='-', label='NEQR', marker='1')
@@ -196,7 +196,7 @@ if __name__ == '__main__':
 
     plt.plot(imgSizeList, brqi_nums, color = 'pink', linestyle='-', label='BRQI', marker='p')
     plt.plot(imgSizeList, frqi_nums, color = 'cyan', linestyle='-', label='FRQI', marker='h')
-    # plt.plot(imgSizeList, ftqr_nums, color = 'brown', linestyle='-', label='FTQR', marker='v')
+    plt.plot(imgSizeList, ftqr_nums, color = 'brown', linestyle='-', label='FTQR', marker='v')
     plt.plot(imgSizeList, gqir_nums, color = 'gray', linestyle='-', label='GQIR', marker='<')
     plt.plot(imgSizeList, mcrqi_nums, color = 'orange', linestyle='-', label='MCRQI', marker='>')
     plt.plot(imgSizeList, neqr_nums, color = 'darkred', linestyle='-', label='NEQR', marker='1')
@@ -208,4 +208,5 @@ if __name__ == '__main__':
     plt.ylabel('number of utilized qubits')
     plt.yscale('log')
     plt.title('Qubits Number')
+    plt.savefig('result/evalCurve.jpg')
     plt.show()

@@ -1,4 +1,6 @@
 import math
+import os
+
 import numpy as np
 from PIL import Image
 from matplotlib import pyplot as plt
@@ -50,6 +52,8 @@ def imageEval(imgpath1, imgpath2):
 
 # save image
 def imageSave(img, prefix, resultHome, params):
+    if not os.path.exists(resultHome):
+        os.makedirs(resultHome)
     if img.mode == "F":
         img = img.convert('RGB')
         file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'

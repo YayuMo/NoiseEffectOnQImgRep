@@ -15,7 +15,7 @@ def constructBackend(method, params, qb_nums):
         noise_model = constructBitFlipNoiseModel(params)
         return AerSimulator(noise_model = noise_model)
     elif (method == 'Amplitude Damping'):
-        noise_model = constructAmplitudeDampingNoiseModel(params, qb_nums)
+        noise_model = constructAmplitudeDampingNoiseModel(params, qb_nums, False)
         return AerSimulator(noise_model = noise_model)
     elif (method == 'Depolarization'):
         noise_model = constructDepolarizationNoiseModel(params)

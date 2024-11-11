@@ -12,7 +12,7 @@ from noise_model import constructAmplitudeDampingNoiseModel, constructDepolariza
 import matplotlib
 
 from QRAM import QRAM_circuit
-from imageUtil import to_bin, plotCompareDistribution
+from imageUtil import to_bin, plotCompareDistribution, image2Arr
 from imgRev import generateKeySet, ampDisReversion
 from qiskit_backend import constructBackend
 
@@ -142,9 +142,10 @@ def qramEncoding(imgArr):
 
 # simulate
 def simulate(qc, shots, backend):
+    t_qc = transpile(qc, backend)
     sampler = Sampler(backend=backend)
     sampler.options.default_shots = shots
-    result = sampler.run([qc]).result()
+    result = sampler.run([t_qc]).result()
     try:
         dist = result[0].data.meas.get_counts()
     except:

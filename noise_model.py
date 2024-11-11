@@ -45,16 +45,19 @@ def constructDepolarizationNoiseModel(param_dep):
     return noise_model
 
 # Amplitude Damping Model on Measurement
-def constructAmplitudeDampingNoiseModel(param_meas, qb_nums):
+def constructAmplitudeDampingNoiseModel(param_meas, qb_nums, rand):
     # construct error
     qerror_meas = amplitude_damping_error(param_meas)
     # build noise model
     noise_model = NoiseModel()
-    noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
-    # sampleList = randomQubitSeriesGenerator(0.25, qb_nums)
-    # for sample in sampleList:
-    #     noise_model.add_quantum_error(qerror_meas, 'measure', [sample])
-    return noise_model
+    if rand == True:
+        sampleList = randomQubitSeriesGenerator(0.25, qb_nums)
+        for sample in sampleList:
+            noise_model.add_quantum_error(qerror_meas, 'measure', [sample])
+        return noise_model
+    else:
+        noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
+        return noise_model
 
 # Phase Damping Model on phase gate
 def constructPhaseDampingNoiseModel(param_phase):
