@@ -65,4 +65,33 @@
     \end{bmatrix}
     $$
 
-  - 
+  - As the name indicates, this is a combination of a phase flip and a bit flip, since $Y=iXZ$.
+
+### Depolarization channel
+
+- The depolarization channel is an important type of quantum noise. Imagine we take a single qubit, and with probability $p$ that qubit is depolarized. That is it is replaced by the completely mixed state, $I/2$. With probability $1-p$ the qubit is left untouched. The state of the quantum system after this noise is
+
+- $$
+  \varepsilon(\rho) = \frac{pI}{2}+(1-p)\rho
+  $$
+
+- A quantum circuit simulating the depolarizing channel is illustrated as follows:
+
+- ![image-20241111162652716](/home/arthur/.config/Typora/typora-user-images/image-20241111162652716.png)
+
+- The top line of the circuit is the input to the depolarizing channel, while the bottom two lines are an 'environment'  to simulate the channel. We have used an environment with two mixed state inputs. The idea is that the third qubit, initially a mixture of the state $\ket{0}$ with probability $1-p$ and state $\ket{1}$ with probability $p$ acts as a control for whether or not the completely mixed state $I/2$ stored in the second qubit is swapped into the first qubit.
+
+- The formula above is not in the operator-sum representation. However, if we observe that for arbitrary $\rho$,
+
+- $$
+  \frac{I}{2} = \frac{\rho+X\rho X+Y\rho Y+Z\rho Z}{4}
+  $$
+
+- and then substitute for $I/2$ into formula (1) we arrive at the equation
+
+- $$
+  \varepsilon(\rho)=(1-\frac{3p}{4})\rho+\frac{p}{4}(X\rho X+Y\rho Y + Z\rho Z)
+  $$
+
+- showing that  
+
