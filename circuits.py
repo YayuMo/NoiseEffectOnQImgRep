@@ -16,7 +16,6 @@ from imageUtil import to_bin, plotCompareDistribution, image2Arr
 from imgRev import generateKeySet, ampDisReversion
 from qiskit_backend import constructBackend
 
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 # Basis Encoding

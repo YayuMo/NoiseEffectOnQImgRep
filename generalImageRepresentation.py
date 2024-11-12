@@ -16,7 +16,7 @@ import matplotlib
 
 from circuits import simulate
 
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from PIL import Image
 

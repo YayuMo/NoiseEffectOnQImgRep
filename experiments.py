@@ -243,7 +243,7 @@ if __name__ == '__main__':
 
 
 
-    imgDictList,imgDiffList = experiments(experiment_settings_AMP)
+    imgDictList,imgDiffList = experiments(experiment_settings_FRQI)
     imgPlot(imgDictList, 'out')
     imgPlot(imgDiffList, 'diff')
     plotEvalCurve(imgDictList)

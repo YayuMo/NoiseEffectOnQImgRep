@@ -1,6 +1,6 @@
 import qiskit as qk
 import matplotlib
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 from qiskit.circuit.library import MCMT, SwapGate, MCXGate,ZGate
 from qiskit.quantum_info import Operator
 # from qiskit.circuit.library import SwapGate
