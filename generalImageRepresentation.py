@@ -190,7 +190,7 @@ def Rev_FRQI(image, counts):
     classical_colors = list(reversed(np.interp(classical_colors, (0, np.pi / 2), (0, 256)).astype(int)))
     imgArr = np.array(classical_colors).reshape(image.shape)
     # print(classical_colors, '\n', input_im)
-    return Image.fromarray(imgArr)
+    return Image.fromarray(imgArr.astype(np.uint8))
 
 # FTQR encoding
 def FTQR(image):

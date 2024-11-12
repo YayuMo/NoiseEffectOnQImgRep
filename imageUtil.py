@@ -71,13 +71,17 @@ def imageSave(img, prefix, resultHome, params):
     #     return file_path
 
 # image plot
-def imgPlot(imgDictList):
+def imgPlot(imgDictList, type):
     n = int(math.sqrt(len(imgDictList)))
     for i in range(len(imgDictList)):
         image = Image.open(imgDictList[i]['img_path'])
         plt.subplot(n, n , i+1)
         plt.imshow(image, cmap='gray')
         plt.title(imgDictList[i]['title'])
+    if type == 'diff':
+        plt.savefig('result/diff.png')
+    else:
+        plt.savefig('result/output.png')
     plt.show()
 
 # plot evaluation curve
@@ -101,6 +105,8 @@ def plotEvalCurve(imgDictList):
     ax1.set_xlabel('Params')
     ax1.set_ylabel('MSE')
     ax2.set_ylabel('SSIM')
+
+    plt.savefig('result/eval.png')
     plt.show()
 
 
