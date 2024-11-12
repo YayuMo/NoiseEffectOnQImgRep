@@ -143,13 +143,14 @@ def qramEncoding(imgArr):
 # simulate
 def simulate(qc, shots, backend):
     t_qc = transpile(qc, backend)
-    sampler = Sampler(backend=backend)
+    sampler = Sampler(backend)
     sampler.options.default_shots = shots
     result = sampler.run([t_qc]).result()
+    # print(result[0].data.keys())
     try:
         dist = result[0].data.meas.get_counts()
     except:
-        dist = result[0].data.c.get_counts()
+        dist = result[0].data.cl_reg.get_counts()
     # print(dist)
     # plot_distribution(dist)
     # plt.show()

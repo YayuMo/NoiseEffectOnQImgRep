@@ -84,6 +84,7 @@ def experiments(experSettings):
                 'param': param
             })
         # print(imgDiffList)
+
     elif experSettings['encoding'] == 'MCRQI':
         img = imageOpen(
             imagePath=IMG_PATH,
@@ -92,7 +93,7 @@ def experiments(experSettings):
         )
         qc, n = MCRQI(img)
         ideal_sim = constructBackend('aer', 0, n)
-        distIdeal = simulate2(qc, shots, ideal_sim)
+        distIdeal = simulate(qc, shots, ideal_sim)
         imgEncoded = Rev_MCRQI(img, distIdeal, to_print=False)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
         imgDictList.append({
@@ -108,7 +109,7 @@ def experiments(experSettings):
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
             noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
-            dist = simulate2(qc, shots, noise_sim)
+            dist = simulate(qc, shots, noise_sim)
             imgProcessed = Rev_MCRQI(img, dist, to_print=False)
             imgProcessedPath = imageSave(
                 img = imgProcessed,
@@ -154,7 +155,7 @@ def experiments(experSettings):
         )
         qc, n = FRQI(img)
         ideal_sim = constructBackend('aer', 0, n)
-        distIdeal = simulate2(qc, shots, ideal_sim)
+        distIdeal = simulate(qc, shots, ideal_sim)
         imgEncoded = Rev_FRQI(img, distIdeal)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
         imgDictList.append({
@@ -170,8 +171,8 @@ def experiments(experSettings):
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
             noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
-            dist = simulate2(qc, shots, noise_sim)
-            imgProcessed = Rev_MCRQI(img, dist, to_print=False)
+            dist = simulate(qc, shots, noise_sim)
+            imgProcessed = Rev_FRQI(img, dist)
             imgProcessedPath = imageSave(
                 img = imgProcessed,
                 prefix='ampDamp',
@@ -205,8 +206,6 @@ def experiments(experSettings):
                 'title': 'param = ' + str(param),
                 'param': param
             })
-
-        pass
 
     return imgDictList,imgDiffList
 

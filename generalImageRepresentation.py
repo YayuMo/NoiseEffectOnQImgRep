@@ -188,8 +188,9 @@ def Rev_FRQI(image, counts):
         except ZeroDivisionError:
             print("ZeroDivisionError")
     classical_colors = list(reversed(np.interp(classical_colors, (0, np.pi / 2), (0, 256)).astype(int)))
+    imgArr = np.array(classical_colors).reshape(image.shape)
     # print(classical_colors, '\n', input_im)
-    return np.array(classical_colors).reshape(image.shape)
+    return Image.fromarray(imgArr)
 
 # FTQR encoding
 def FTQR(image):
@@ -649,7 +650,7 @@ def simulate2(qc, shots, backend):
     return counts
 
 if __name__ == '__main__':
-    img = imageOpen('img/duck.png', 32, cmap='L')
+    img = imageOpen('img/duck.png', 16, cmap='L')
     # img = np.random.uniform(low=0, high=255, size=(16, 16)).astype(int)
     # img = imageOpen('img/duck.png', 2, cmap='RGB')
     # img = imageGenerate(8, 10)
@@ -667,18 +668,18 @@ if __name__ == '__main__':
     # qc.draw(output='mpl')
     shots = 20000
     # print(n)
-    aer_sim = AerSimulator()
+    aer_sim = Aer.get_backend('qasm_simulator')
     t_qc = transpile(qc, aer_sim)
     qobj = assemble(t_qc, shots = shots)
-    result = aer_sim.run(qobj).result()
-    counts = result.get_counts(qc)
+    # result = aer_sim.run(qobj).result()
+    # counts = result.get_counts(qc)
     # print(result)
     dist = simulate(t_qc, shots, aer_sim)
     # print(len(dist))
 
     # img_rev = Rev_BRQI(img, counts)
     # img_rev = Rev_MCRQI(img, counts, to_print=False)
-    img_rev = Rev_FRQI(img, counts)
+    img_rev = Rev_FRQI(img, dist)
     # img_rev = Rev_NEQR(img, counts)
     # img_rev = Rev_OQIM(img, counts)
     # img_rev = Rev_QSMC(img, counts)

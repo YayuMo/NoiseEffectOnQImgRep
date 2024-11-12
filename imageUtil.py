@@ -48,21 +48,27 @@ def imageEval(imgpath1, imgpath2):
     mse = np.sum((img1.astype("float") - img2.astype("float")) ** 2)
     mse /= float(img1.shape[0] * img1.shape[1])
     sim = ssim(img1, img2)
+    print(mse, sim)
     return mse, sim
 
 # save image
 def imageSave(img, prefix, resultHome, params):
     if not os.path.exists(resultHome):
         os.makedirs(resultHome)
-    if img.mode == "F":
-        img = img.convert('RGB')
-        file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
-        img.save(file_path)
-        return file_path
-    else:
-        file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
-        img.save(file_path)
-        return file_path
+    img = img.convert('RGB')
+    file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
+    img.save(file_path)
+    return file_path
+    # if img.mode == "F":
+    #     img = img.convert('RGB')
+    #     file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
+    #     img.save(file_path)
+    #     return file_path
+    # else:
+    #     img = img.convert('RGB')
+    #     file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
+    #     img.save(file_path)
+    #     return file_path
 
 # image plot
 def imgPlot(imgDictList):
