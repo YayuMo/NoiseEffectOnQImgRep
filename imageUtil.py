@@ -48,7 +48,7 @@ def imageEval(imgpath1, imgpath2):
     mse = np.sum((img1.astype("float") - img2.astype("float")) ** 2)
     mse /= float(img1.shape[0] * img1.shape[1])
     sim = ssim(img1, img2)
-    print(mse, sim)
+    # print(mse, sim)
     return mse, sim
 
 # save image
