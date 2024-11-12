@@ -241,8 +241,6 @@ if __name__ == '__main__':
         'home_path': 'result/FRQI_AmpDam/',
     }
 
-
-
     imgDictList,imgDiffList = experiments(experiment_settings_MCRQI)
     imgPlot(imgDictList, 'out')
     imgPlot(imgDiffList, 'diff')
