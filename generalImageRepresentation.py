@@ -275,7 +275,7 @@ def MCRQI(image):
     qr = QuantumRegister(xqbit + yqbit + 3)  # 3 stands for RGB qubits
     # color = qr[xqbit + yqbit:]
     # coordinate = qr[:xqbit + yqbit]
-    cr = ClassicalRegister(xqbit + yqbit + 3, 'c')
+    cr = ClassicalRegister(xqbit + yqbit + 3, 'cl_reg')
     qc = QuantumCircuit(qr, cr)
 
     for k in range(int(np.floor((xqbit + yqbit) / 2))):
@@ -354,8 +354,8 @@ def Rev_MCRQI(image, counts, to_print=True):
         if to_print:
             print(output_im, '\n', (image.T)[layer_num].copy().flatten())
         output_ims.append(output_im.reshape(image[:, :, 0].shape))
-
-    return np.array(output_ims).T
+    imageArr = np.array(output_ims).T
+    return Image.fromarray(imageArr.astype(np.uint8))
 
 # NEQR encoding -- QRAM and QROM
 def NEQR(image):
