@@ -355,6 +355,7 @@ def Rev_MCRQI(image, counts, to_print=True):
             print(output_im, '\n', (image.T)[layer_num].copy().flatten())
         output_ims.append(output_im.reshape(image[:, :, 0].shape))
     imageArr = np.array(output_ims).T
+    # print(type(imageArr))
     return imageArr
 
 # NEQR encoding -- QRAM and QROM

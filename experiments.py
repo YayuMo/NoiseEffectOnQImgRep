@@ -70,10 +70,10 @@ def experiments(experSettings):
             processed_img = cv2.imread(imgProcessedPath)
             encoded_img = cv2.imread(encodedImgPath)
             pixel_diff = cv2.absdiff(processed_img, encoded_img)
-            img_diff = Image.fromarray(pixel_diff)
+            # img_diff = Image.fromarray(pixel_diff)
             # print(img_diff)
             img_diff_path = imageSave(
-                img = img_diff,
+                img = pixel_diff,
                 prefix='Diff',
                 resultHome=result_home,
                 params=param
@@ -111,6 +111,7 @@ def experiments(experSettings):
             noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
             dist = simulate(qc, shots, noise_sim)
             imgProcessed = Rev_MCRQI(img, dist, to_print=False)
+            # print(type(imgProcessed))
             imgProcessedPath = imageSave(
                 img = imgProcessed,
                 prefix='ampDamp',
@@ -131,10 +132,10 @@ def experiments(experSettings):
             processed_img = cv2.imread(imgProcessedPath)
             encoded_img = cv2.imread(encodedImgPath)
             pixel_diff = cv2.absdiff(processed_img, encoded_img)
-            img_diff = Image.fromarray(pixel_diff)
+            # img_diff = Image.fromarray(pixel_diff)
             # print(img_diff)
             img_diff_path = imageSave(
-                img = img_diff,
+                img = pixel_diff,
                 prefix='Diff',
                 resultHome=result_home,
                 params=param
@@ -193,10 +194,10 @@ def experiments(experSettings):
             processed_img = cv2.imread(imgProcessedPath)
             encoded_img = cv2.imread(encodedImgPath)
             pixel_diff = cv2.absdiff(processed_img, encoded_img)
-            img_diff = Image.fromarray(pixel_diff)
+            # img_diff = Image.fromarray(pixel_diff)
             # print(img_diff)
             img_diff_path = imageSave(
-                img = img_diff,
+                img = pixel_diff,
                 prefix='Diff',
                 resultHome=result_home,
                 params=param
@@ -253,10 +254,10 @@ def experiments(experSettings):
             processed_img = cv2.imread(imgProcessedPath)
             encoded_img = cv2.imread(encodedImgPath)
             pixel_diff = cv2.absdiff(processed_img, encoded_img)
-            img_diff = Image.fromarray(pixel_diff)
+            # img_diff = Image.fromarray(pixel_diff)
             # print(img_diff)
             img_diff_path = imageSave(
-                img = img_diff,
+                img = pixel_diff,
                 prefix='Diff',
                 resultHome=result_home,
                 params=param
@@ -306,7 +307,7 @@ if __name__ == '__main__':
         'noiseModel': 'Amplitude Damping',
         'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
         'shots': 20000,
-        'resize': 32,
+        'resize': 8,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/NEQR_AmpDam/',
     }
