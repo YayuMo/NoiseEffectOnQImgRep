@@ -41,7 +41,7 @@ def BRQI(image):
     y_ax = QuantumRegister(w_bits, 'y axis')
     x_ax = QuantumRegister(h_bits, 'x axis')
     bitplane_q = QuantumRegister(color_n_b, 'bitplanes')
-    classic = ClassicalRegister(1 + w_bits + h_bits + color_n_b, 'classic')
+    classic = ClassicalRegister(1 + w_bits + h_bits + color_n_b, 'cl_reg')
     qc = QuantumCircuit(color, y_ax, x_ax, bitplane_q, classic)
 
     # qc.id(color)
@@ -219,7 +219,7 @@ def GQIR(image):
     color = QuantumRegister(q, 'color')
     y_ax = QuantumRegister(y, 'y axis')
     x_ax = QuantumRegister(x, 'x axis')
-    classic = ClassicalRegister(x + y + q, 'classic')
+    classic = ClassicalRegister(x + y + q, 'cl_reg')
     qc = QuantumCircuit(color, y_ax, x_ax, classic)
 
     # qc.id(color)
@@ -364,7 +364,7 @@ def NEQR(image):
 
     indx = QuantumRegister(w_bits + h_bits, 'indx')
     intensity = QuantumRegister(8, 'intensity')
-    cr = ClassicalRegister(len(indx) + len(intensity), 'cr')
+    cr = ClassicalRegister(len(indx) + len(intensity), 'cl_reg')
     qc = QuantumCircuit(intensity, indx, cr)
     num_qubits = qc.num_qubits
     input_im = image.copy().flatten()
