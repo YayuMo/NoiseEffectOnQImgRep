@@ -387,7 +387,7 @@ def NEQR(image):
                     qc.x(qc.num_qubits-j-1)
         qc.barrier()
     qc.measure(range(qc.num_qubits), range(cr.size))
-    return qc
+    return qc, qc.num_qubits
 
 # NEQR Rev
 def Rev_NEQR(image, counts):
