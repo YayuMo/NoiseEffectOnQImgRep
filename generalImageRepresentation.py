@@ -190,7 +190,7 @@ def Rev_FRQI(image, counts):
     classical_colors = list(reversed(np.interp(classical_colors, (0, np.pi / 2), (0, 256)).astype(int)))
     imgArr = np.array(classical_colors).reshape(image.shape)
     # print(classical_colors, '\n', input_im)
-    return Image.fromarray(imgArr.astype(np.uint8))
+    return imgArr
 
 # FTQR encoding
 def FTQR(image):
@@ -355,7 +355,7 @@ def Rev_MCRQI(image, counts, to_print=True):
             print(output_im, '\n', (image.T)[layer_num].copy().flatten())
         output_ims.append(output_im.reshape(image[:, :, 0].shape))
     imageArr = np.array(output_ims).T
-    return Image.fromarray(imageArr.astype(np.uint8))
+    return imageArr
 
 # NEQR encoding -- QRAM and QROM
 def NEQR(image):

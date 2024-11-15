@@ -55,6 +55,7 @@ def imageEval(imgpath1, imgpath2):
 def imageSave(img, prefix, resultHome, params):
     if not os.path.exists(resultHome):
         os.makedirs(resultHome)
+    img = Image.fromarray(img.astype(np.uint8))
     img = img.convert('RGB')
     file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
     img.save(file_path)
