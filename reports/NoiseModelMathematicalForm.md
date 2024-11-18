@@ -256,7 +256,115 @@
   (r_x, r_y, r_z) \rarr (r_x\sqrt{1-\lambda}, r_y\sqrt{1-\lambda}, r_z)
   $$
 
-- which has the effect of shrinking the sphere into ellipsoids. Phase damping is often referred to as a '$T_2$' (or 'spin-spin') relaxation process, for historical reasons, where $e^{-t/2T_2}=$
+- which has the effect of shrinking the sphere into ellipsoids. Phase damping is often referred to as a '$T_2$' (or 'spin-spin') relaxation process, for historical reasons, where $e^{-t/2T_2}=\sqrt{1-\lambda}$. As a function of time, the amount of damping increases, corresponding to an inwards flow of all points in the unit ball towards the $\hat{z}$ axis. Note that states along the $\hat{z}$ axis remain invariant.
+
+- Historically, phase damping was a process that was almost always thought of, physically, as resulting from a random phase kick or scattering process. It was not until the connection to the phase flip channel was discovered that quantum error-correction was developed, since it was thought that phase errors were $continuous$ and couldn't be described as a discrete process! In fact, single qubit phase errors can $always$ be thought of as resulting from a process in which either nothing happens to a qubit, with probability $\alpha$, or with probability $1-\alpha$, the qubit is flipped by the $Z$ Pauli operation. Although this might not be the actual microscopic physical process happening, from the standpoint of the transformation occurring to a qubit over a discrete time interval large compared to the underlying random process, there is no difference at all.
+
+- Phasing damping is one of the most subtle and important processes in the study of quantum computation and quantum information. It has been the subject of an immense amount of study and speculation, particularly with regard to why the world around us appears to be so classical, with superposition states not a part of our everyday experience! Perhaps it is phase damping that is responsible for this absence of superposition states from the everyday (Excercise 8.31)? The pioneering quantum physicist Schrodinger was perhaps the first to pose this problem and he did this in a particularly stark form, as discussed in Box 8.4. 
+
+### Summary of Quantum noise and quantum operations
+
+- **The operator-sum representation:** The behavior of an open quantum system can be modeled as 
+
+  - $$
+    \varepsilon(\rho)=\sum_kE_k\rho E_k^{\dagger}
+    $$
+
+  - where $E_k$ are operation elements, satisfying $\sum_kE_k^{\dagger}E_k=I$ if the quantum operation is trace-preserving.
+
+- **Environmental models for quantum operations:** A trace-preserving quantum operation can always be regarded as arising from the unitary interaction of a system with an initially uncorrelated environment, and vice versa. Non-trace-preserving quantum operations may be treated similarly, except an additional projective measurement is performed on the composite of system and environment, with the different outcomes corresponding to different non-trace-preserving quantum operations.
+
+- **Quantum process tomography:** A quantum operation on a $d$-dimensional quantum system can be completely determined by experimentally measuring the output density matrices produced from $d^2$ pure state inputs.
+
+- **Operation elements for important single qubit quantum operations:**
+
+  - depolarizing channel
+
+    - $$
+      \sqrt{1-\frac{3p}{4}}\begin{bmatrix}
+      1 & 0 \\
+      0 & 1
+      \end{bmatrix}, \quad
+      \sqrt{\frac{p}{4}}\begin{bmatrix}
+      0 & 1 \\
+      1 & 0
+      \end{bmatrix}, \quad \\
+      \sqrt{\frac{p}{4}}\begin{bmatrix}
+      0 & -i \\
+      i & 0
+      \end{bmatrix}, \quad
+      \sqrt{\frac{p}{4}}\begin{bmatrix}
+      1 & 0 \\
+      0 & -1
+      \end{bmatrix},
+      $$
+
+  - amplitude damping
+
+    - $$
+      \begin{bmatrix}
+      1 & 0 \\
+      0 & \sqrt{1-\gamma}
+      \end{bmatrix}, \quad
+      \begin{bmatrix}
+      0 & \sqrt{\gamma} \\
+      0 & 0
+      \end{bmatrix}
+      $$
+
+  - phase damping
+
+    - $$
+      \begin{bmatrix}
+      1 & 0 \\
+      0 & \sqrt{1-\gamma}
+      \end{bmatrix}, \quad
+      \begin{bmatrix}
+      0 & 0 \\
+      0 & \sqrt{\gamma}
+      \end{bmatrix}
+      $$
+
+  - phase flip
+
+    - $$
+      \sqrt{p}\begin{bmatrix}
+      1 & 0 \\
+      0 & 1
+      \end{bmatrix}, \quad
+      \sqrt{1-p}\begin{bmatrix}
+      1 & 0 \\
+      0 & -1
+      \end{bmatrix}
+      $$
+
+  - bit flip
+
+    - $$
+      \sqrt{p}\begin{bmatrix}
+      1 & 0 \\
+      0 & 1
+      \end{bmatrix}, \quad
+      \sqrt{1-p}\begin{bmatrix}
+      0 & 1 \\
+      1 & 0
+      \end{bmatrix}
+      $$
+
+  - bit-phase flip
+
+    - $$
+      \sqrt{p}\begin{bmatrix}
+      1 & 0 \\
+      0 & 1
+      \end{bmatrix}, \quad
+      \sqrt{1-p}\begin{bmatrix}
+      0 & -i \\
+      i & 0
+      \end{bmatrix}
+      $$
+
+
 
 
 
