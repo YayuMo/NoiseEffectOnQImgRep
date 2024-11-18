@@ -297,7 +297,7 @@ if __name__ == '__main__':
         'noiseModel': 'Amplitude Damping',
         'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
         'shots': 20000,
-        'resize': 16,
+        'resize': 32,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/FRQI_AmpDam/',
     }
@@ -312,7 +312,7 @@ if __name__ == '__main__':
         'home_path': 'result/NEQR_AmpDam/',
     }
 
-    imgDictList,imgDiffList = experiments(experiment_settings_NEQR)
+    imgDictList,imgDiffList = experiments(experiment_settings_MCRQI)
     imgPlot(imgDictList, 'out')
     imgPlot(imgDiffList, 'diff')
     plotEvalCurve(imgDictList)
