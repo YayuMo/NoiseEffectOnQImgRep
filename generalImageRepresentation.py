@@ -658,6 +658,8 @@ if __name__ == '__main__':
     # print(img)
     # img = np.random.uniform(low=0, high=255, size=(2, 2)).astype(int)
     # qc = BRQI(img)
+
+    
     qc,n = FRQI(img)
     # qc = FTQR(img)
     # qc = GQIR(img)
