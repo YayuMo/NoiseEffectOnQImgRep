@@ -79,7 +79,7 @@ def circuitEvaluation(imgPath, imgSizeList, encoding, backend):
     elif encoding == 'FRQI':
         for size in tqdm(imgSizeList):
             vec = imageOpen(imgPath, size, 'L')
-            qc = FRQI(vec)
+            qc,n = FRQI(vec)
             qc_depths.append(qc.depth())
             qc_nums.append(qc.num_qubits)
 
@@ -107,7 +107,7 @@ def circuitEvaluation(imgPath, imgSizeList, encoding, backend):
     elif encoding == 'NEQR':
         for size in tqdm(imgSizeList):
             vec = imageOpen(imgPath, size, 'L')
-            qc = NEQR(vec)
+            qc,n = NEQR(vec)
             qc_depths.append(qc.depth())
             qc_nums.append(qc.num_qubits)
 
@@ -156,8 +156,8 @@ if __name__ == '__main__':
 
     brqi_depths, brqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='BRQI', backend=hardware)
     frqi_depths, frqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FRQI', backend=hardware)
-    ftqr_depths, ftqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FTQR', backend=sim)
-    gqir_depths, gqir_nums = circuitEvaluation(imgPath, imgSizeList, encoding='GQIR', backend=hardware)
+    # ftqr_depths, ftqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='FTQR', backend=sim)
+    # gqir_depths, gqir_nums = circuitEvaluation(imgPath, imgSizeList, encoding='GQIR', backend=hardware)
     mcrqi_depths, mcrqi_nums = circuitEvaluation(imgPath, imgSizeList, encoding='MCRQI', backend=hardware)
     neqr_depths, neqr_nums = circuitEvaluation(imgPath, imgSizeList, encoding='NEQR', backend=sim)
     oqim_depths, oqim_nums = circuitEvaluation(imgPath, imgSizeList, encoding='OQIM', backend=sim)
@@ -173,8 +173,8 @@ if __name__ == '__main__':
 
     plt.plot(imgSizeList, brqi_depths, color = 'pink', linestyle='-', label='BRQI', marker='p')
     plt.plot(imgSizeList, frqi_depths, color = 'cyan', linestyle='-', label='FRQI', marker='h')
-    plt.plot(imgSizeList, ftqr_depths, color = 'brown', linestyle='-', label='FTQR', marker='v')
-    plt.plot(imgSizeList, gqir_depths, color = 'gray', linestyle='-', label='GQIR', marker='<')
+    # plt.plot(imgSizeList, ftqr_depths, color = 'brown', linestyle='-', label='FTQR', marker='v')
+    # plt.plot(imgSizeList, gqir_depths, color = 'gray', linestyle='-', label='GQIR', marker='<')
     plt.plot(imgSizeList, mcrqi_depths, color = 'orange', linestyle='-', label='MCRQI', marker='>')
     plt.plot(imgSizeList, neqr_depths, color = 'darkred', linestyle='-', label='NEQR', marker='1')
     plt.plot(imgSizeList, oqim_depths, color = 'olive', linestyle='-', label='OQIM', marker='2')
@@ -196,8 +196,8 @@ if __name__ == '__main__':
 
     plt.plot(imgSizeList, brqi_nums, color = 'pink', linestyle='-', label='BRQI', marker='p')
     plt.plot(imgSizeList, frqi_nums, color = 'cyan', linestyle='-', label='FRQI', marker='h')
-    plt.plot(imgSizeList, ftqr_nums, color = 'brown', linestyle='-', label='FTQR', marker='v')
-    plt.plot(imgSizeList, gqir_nums, color = 'gray', linestyle='-', label='GQIR', marker='<')
+    # plt.plot(imgSizeList, ftqr_nums, color = 'brown', linestyle='-', label='FTQR', marker='v')
+    # plt.plot(imgSizeList, gqir_nums, color = 'gray', linestyle='-', label='GQIR', marker='<')
     plt.plot(imgSizeList, mcrqi_nums, color = 'orange', linestyle='-', label='MCRQI', marker='>')
     plt.plot(imgSizeList, neqr_nums, color = 'darkred', linestyle='-', label='NEQR', marker='1')
     plt.plot(imgSizeList, oqim_nums, color = 'olive', linestyle='-', label='OQIM', marker='2')

@@ -22,8 +22,8 @@ def ampDisReversion(dist, keyset, sqSum, shots, n):
     sorted_dist = np.array(list(sorted_dict.values()))
     size = int(2 ** (n / 2))
     dist_Mat = sorted_dist.reshape((size, size))
-    img = Image.fromarray(dist_Mat)
+    # img = Image.fromarray(dist_Mat)
     # print(dist_Mat)
-    return img
+    return dist_Mat
 
 # retrieve img from angle encoding
