@@ -160,32 +160,33 @@ if __name__ == '__main__':
     # imgArr = np.array([200, 255])
     # imgArr = np.array([10])
     # print(basisEncoding(imgArr))
-    # qc = angleEncodingCircuit(imgArr)
+    qc = angleEncodingCircuit(imgArr)
     # qc, encoding = basisEncoding(imgArr)
     # qc = denseangleEncoding(imgArr)
     # qasm = constructBackend('qasm', 0)
     # qc, n = quamEncoding(imgArr)
-    qc = qramEncoding(imgArr)
-    print(qc.num_qubits)
+    # qc = qramEncoding(imgArr)
+    # print(qc.num_qubits)
     # qc = transpile(qc, qasm)
     # qc.draw()
-    qc.draw(output='mpl')
+    # qc.draw(output='mpl')
     # qc,sqSum, n = amplitudeEncoding(imgArr)
-    # shots = 1024
-    # # param_meas = 0.1  # amplitude damping parameter
+    shots = 1024
+    param_meas = 0.1  # amplitude damping parameter
     # # # param_dep = 0.5 # depolarization parameter
     # # param_phase = 0.5 # phase damping parameter
-    # param_bf = 0.5
+    param_bf = 0.5
     # # # # get_simulator
-    # ideal_sim = constructBackend('qasm', 0)
-    # # noise_sim = constructBackend('Depolarization', param_dep)
-    # # noise_sim = constructBackend('Amplitude Damping', param_meas)
-    # # noise_sim = constructBackend('Phase Damping', param_phase)
-    # noise_sim = constructBackend('Bit Flip', param_bf)
-    # qc = transpile(qc, noise_sim)
-    # qc.draw(output='mpl')
-    # dist_ideal = simulate(qc, shots, ideal_sim)
-    # dist_noise = simulate(qc, shots, noise_sim)
+    ideal_sim = constructBackend('qasm', 0, qc.num_qubits)
+    # noise_sim = constructBackend('Depolarization', param_dep)
+    noise_sim = constructBackend('Amplitude Damping', param_meas, qc.num_qubits)
+    # noise_sim = constructBackend('Phase Damping', param_phase)
+    # noise_sim = constructBackend('Bit Flip', param_bf, qc.num_qubits)
+    t_qc = transpile(qc, noise_sim)
+    qc.draw(output='mpl')
+    t_qc.draw(output='mpl')
+    dist_ideal = simulate(qc, shots, ideal_sim)
+    dist_noise = simulate(t_qc, shots, noise_sim)
     #
     # # keyset = generateKeySet(n)
     # # img_ideal = ampDisReversion(dist_ideal, keyset, sqSum, shots, n)
@@ -200,8 +201,8 @@ if __name__ == '__main__':
     #
     # print(dist_noise.keys())
     # print(dist_ideal.keys())
-    # plot_distribution(dist_ideal, title="Ideal Distribution")
-    # plot_distribution(dist_noise, title="Noise Distribution")
+    plot_distribution(dist_ideal, title="Ideal Distribution")
+    plot_distribution(dist_noise, title="Noise Distribution")
     #
     # # plotCompareDistribution(keyset, dist_ideal, dist_noise, ['Ideal', 'Noise Embedded'])
     plt.show()

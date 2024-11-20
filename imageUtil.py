@@ -160,11 +160,26 @@ def plotCompareDistribution(keyset, dist1, dist2, labels):
 
 
 if __name__ == '__main__':
-    list1 = [1,2,3,4]
-    list2 = [2,3,4,5]
-    arr1 = np.array(list1)
-    arr2 = np.array(list2)
-    print(arr2-arr1)
+    image1 = Image.open('result/AmpEn_AmpDam/Encoded0.jpg')
+    image2 = Image.open('result/AmpEn_AmpDam/ampDamp15.jpg')
+    image3 = Image.open('result/AmpEn_AmpDam/Diff15.jpg')
+    plt.subplot(1,3,1)
+    plt.imshow(image1)
+    plt.title('Encoded Image')
+    plt.axis(False)
+    plt.subplot(1,3,2)
+    plt.imshow(image2)
+    plt.title('Noised Image')
+    plt.axis(False)
+    plt.subplot(1,3,3)
+    plt.imshow(image3)
+    plt.title('Subtracted Image')
+    plt.axis(False)
+    # list1 = [1,2,3,4]
+    # list2 = [2,3,4,5]
+    # arr1 = np.array(list1)
+    # arr2 = np.array(list2)
+    # print(arr2-arr1)
     # keyset = ['00', '01', '10','11']
     # dist1 = {
     #     '00': 1,
@@ -182,3 +197,4 @@ if __name__ == '__main__':
     # print(len(vec))
     # img = arr2Image(vec)
     # img.show()
+    plt.show()
