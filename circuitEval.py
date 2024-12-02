@@ -163,6 +163,8 @@ if __name__ == '__main__':
     oqim_depths, oqim_nums = circuitEvaluation(imgPath, imgSizeList, encoding='OQIM', backend=sim)
     qsmc_depths, qsmc_nums = circuitEvaluation(imgPath, imgSizeList, encoding='QSMC', backend=sim)
 
+    plt.figure(figsize=(15,6))
+
     plt.subplot(1,2,1)
     plt.plot(imgSizeList, basis_depths, color = 'red', linestyle='-', label='Basis Encoding', marker='*')
     plt.plot(imgSizeList, angle_depths, color = 'blue', linestyle='-', label='Angle Encoding', marker='x')
