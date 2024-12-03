@@ -2,7 +2,7 @@ import cmath
 
 import numpy as np
 import math
-from qiskit import QuantumCircuit, transpile
+from qiskit import QuantumCircuit, transpile, QuantumRegister, ClassicalRegister
 from qiskit_aer import Aer, AerSimulator
 from qiskit_ibm_runtime import SamplerV2 as Sampler
 # from qiskit_ibm_runtime import SamplerV1 as Sampler
@@ -36,17 +36,20 @@ def basisEncoding(imgArr):
 # Angle Encoding -- Qubit Lattice
 def angleEncodingCircuit(imgArr):
     # data normalization
-    norm = []
+    # norm = []
     # for data in imgArr:
     #     norm.append(2 * (data * math.pi) / 255.0)
-    signal = np.interp(imgArr, (0, 255), (0, np.pi))
+    norm = np.interp(imgArr, (0, 255), (0, np.pi))
     n = len(imgArr)
 
     # circuit
-    qc = QuantumCircuit(n,n)
-    for i in range(n):
-        qc.ry(norm[i], i)
-    qc.measure_all()
+    # qc = QuantumCircuit(n,n)
+    color = QuantumRegister(len(imgArr), 'color')
+    classic = ClassicalRegister(color.size, 'cl_reg')
+    qc = QuantumCircuit(color, classic)
+    for i, ang in enumerate(norm):
+        qc.ry(ang, i)
+    qc.measure(list(reversed(range(len(imgArr)))), range(len(imgArr)))
 
     # qc.draw(output='mpl')
     # plt.show()
