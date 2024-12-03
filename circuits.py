@@ -37,8 +37,9 @@ def basisEncoding(imgArr):
 def angleEncodingCircuit(imgArr):
     # data normalization
     norm = []
-    for data in imgArr:
-        norm.append((data * math.pi) / 255.0)
+    # for data in imgArr:
+    #     norm.append(2 * (data * math.pi) / 255.0)
+    signal = np.interp(imgArr, (0, 255), (0, np.pi))
     n = len(imgArr)
 
     # circuit

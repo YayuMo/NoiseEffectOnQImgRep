@@ -27,3 +27,15 @@ def ampDisReversion(dist, keyset, sqSum, shots, n):
     return dist_Mat
 
 # retrieve img from angle encoding
+def angleDisReversion(dist, imgArr, shots):
+    pixels = np.zeros((len(imgArr)))
+    for item in dist:
+        for i, bit in enumerate(item):
+            if bit == '0':
+                pixels[i] += dist[item]
+    print(pixels)
+    reconstruct = []
+    for pixel in pixels:
+        color = 2 * np.arccos((pixel / shots) ** (1 / 2))
+        reconstruct.append(color)
+    print(reconstruct)
