@@ -31,7 +31,7 @@ def basisEncoding(imgArr):
     qc.measure_all()
     # qc.draw(output='mpl')
     # plt.show()
-    return qc, encodings
+    return qc.reverse_bits(), encodings
 
 # Angle Encoding -- Qubit Lattice
 def angleEncodingCircuit(imgArr):
@@ -139,9 +139,6 @@ def qramEncoding(imgArr):
 
 # Angle QRAM - FRQI
 
-# Improved QRAM
-
-# Amplitude QRAM
 
 # simulate
 def simulate(qc, shots, backend):

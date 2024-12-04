@@ -45,3 +45,13 @@ def angleDisReversion(dist, imgArr, shots, reshape):
         return dist_Mat
     else:
         return sorted_dist
+
+# retrieve img from basis encoding
+def basisEnReversion(pixelList, imgArr):
+    transferredPixel = []
+    for pixel in pixelList:
+        transferredPixel.append(int(pixel, 2))
+    processed_pixel = np.array(transferredPixel)
+    size = int(math.sqrt(len(imgArr)))
+    dist_Mat = processed_pixel.reshape((size, size))
+    return dist_Mat
