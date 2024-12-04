@@ -55,3 +55,7 @@ def basisEnReversion(pixelList, imgArr):
     size = int(math.sqrt(len(imgArr)))
     dist_Mat = processed_pixel.reshape((size, size))
     return dist_Mat
+
+# retrieve img from dense angle encoding
+def DenseAngleReversion(dist, imgArr, shots, reshape):
+    pass
