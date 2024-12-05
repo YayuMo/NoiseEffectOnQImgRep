@@ -32,11 +32,33 @@ def angleDisReversion(dist, imgArr, shots, reshape):
     for item in dist:
         for i, bit in enumerate(item):
             if bit == '0':
+                print(dist[item])
                 pixels[i] += dist[item]
     # print(pixels)
     size = int(math.sqrt(len(imgArr)))
     reconstruct = []
     for pixel in pixels:
+        color = 2 * np.arccos((pixel / shots) ** (1 / 2)) * 100
+        reconstruct.append(color)
+    sorted_dist = np.array(reconstruct)
+    if reshape == True:
+        dist_Mat = sorted_dist.reshape((size, size))
+        return dist_Mat
+    else:
+        return sorted_dist
+
+# retrieve img from dense angle encoding
+def denseAngleDisReversion(dist, imgArr, shots, reshape):
+    pixelsEven = np.zeros((int(len(imgArr) / 2)))
+    for item in dist:
+        for i, bit in enumerate(item):
+            if bit == '0':
+                print(dist[item])
+                pixelsEven[i] += dist[item]
+    # print(pixels)
+    size = int(math.sqrt(len(imgArr)))
+    reconstruct = []
+    for pixel in pixelsEven:
         color = 2 * np.arccos((pixel / shots) ** (1 / 2)) * 100
         reconstruct.append(color)
     sorted_dist = np.array(reconstruct)
@@ -59,3 +81,5 @@ def basisEnReversion(pixelList, imgArr):
 # retrieve img from dense angle encoding
 def DenseAngleReversion(dist, imgArr, shots, reshape):
     pass
+
+# retrieve img from dense angle encoding

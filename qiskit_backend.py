@@ -10,6 +10,8 @@ def constructBackend(method, params, qb_nums):
         return Aer.get_backend('statevector_simulator')
     elif (method == 'aer'):
         return AerSimulator()
+    elif (method == 'stabilizer'):
+        return AerSimulator(method='extended_stabilizer')
     elif (method == 'qasm'):
         # noisy qasm simulator
         return Aer.get_backend('qasm_simulator')

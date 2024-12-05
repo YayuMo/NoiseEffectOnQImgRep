@@ -56,7 +56,7 @@ def QRAM_circuit(n, m):
         QRAM.x(A[i])
         QRAM.cx(qy[i], A[i])
 
-    # QRAM.measure_all()
+    QRAM.measure_all()
     return QRAM
 
 if __name__ == '__main__':
