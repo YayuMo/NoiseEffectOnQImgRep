@@ -42,5 +42,7 @@ def distributedBasisSimulation(imgArr, partSize, shots, sim):
     retrievedImg = basisEnReversion(processedImg, imgArr)
     return retrievedImg
 
+# MCRQI distributed simulation
+
 
 
