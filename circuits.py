@@ -138,6 +138,49 @@ def qramEncoding(imgArr):
     return qc
 
 # Angle QRAM - FRQI
+def angleQRAM(image):
+    input_im = image.copy().flatten()
+    # print(input_im)
+    thetas = np.interp(input_im, (0, 256), (0, np.pi / 2))
+    coord_q_num = int(np.ceil(math.log(len(input_im), 2)))
+    O = QuantumRegister(coord_q_num, 'coordinates')
+    c = QuantumRegister(1, 'c_reg')
+    cr = ClassicalRegister(O.size + c.size, "cl_reg")
+
+    qc_image = QuantumCircuit(c, O, cr)
+    # qc_image.id(c)
+    qc_image.h(O)
+
+    controls_ = []
+    for i, _ in enumerate(O):
+        controls_.extend([O[i]])
+
+    for i, theta in enumerate(thetas):
+        qubit_index_bin = "{0:b}".format(i).zfill(coord_q_num)
+
+        for k, qub_ind in enumerate(qubit_index_bin):
+            if int(qub_ind):
+                qc_image.x(O[k-1])
+
+        # qc_image.barrier()
+        # for coord_or_intns in (0,1):
+        if (i%2==0):
+            qc_image.p(theta=theta, qubit=c[0])
+        else:
+            qc_image.mcry(theta=2 * theta,
+                      q_controls=controls_,
+                      q_target=c[0])
+
+        # qc_image.barrier()
+        for k, qub_ind in enumerate(qubit_index_bin):
+            if int(qub_ind):
+                qc_image.x(O[k-1])
+
+        # qc_image.barrier()
+
+    qc_image.measure(list(reversed(range(qc_image.num_qubits))), list(range(cr.size)))
+
+    return qc_image, qc_image.num_qubits
 
 
 # simulate
@@ -161,12 +204,13 @@ if __name__ == '__main__':
     # imgArr = np.array([200, 255])
     # imgArr = np.array([10])
     # print(basisEncoding(imgArr))
-    qc = angleEncodingCircuit(imgArr)
+    # qc = angleEncodingCircuit(imgArr)
     # qc, encoding = basisEncoding(imgArr)
     # qc = denseangleEncoding(imgArr)
     # qasm = constructBackend('qasm', 0)
     # qc, n = quamEncoding(imgArr)
     # qc = qramEncoding(imgArr)
+    qc, n = angleQRAM(imgArr)
     # print(qc.num_qubits)
     # qc = transpile(qc, qasm)
     # qc.draw()
@@ -180,14 +224,14 @@ if __name__ == '__main__':
     # # # # get_simulator
     ideal_sim = constructBackend('qasm', 0, qc.num_qubits)
     # noise_sim = constructBackend('Depolarization', param_dep)
-    noise_sim = constructBackend('Amplitude Damping', param_meas, qc.num_qubits)
+    # noise_sim = constructBackend('Amplitude Damping', param_meas, qc.num_qubits)
     # noise_sim = constructBackend('Phase Damping', param_phase)
     # noise_sim = constructBackend('Bit Flip', param_bf, qc.num_qubits)
-    t_qc = transpile(qc, noise_sim)
+    # t_qc = transpile(qc, noise_sim)
     qc.draw(output='mpl')
-    t_qc.draw(output='mpl')
-    dist_ideal = simulate(qc, shots, ideal_sim)
-    dist_noise = simulate(t_qc, shots, noise_sim)
+    # t_qc.draw(output='mpl')
+    # dist_ideal = simulate(qc, shots, ideal_sim)
+    # dist_noise = simulate(t_qc, shots, noise_sim)
     #
     # # keyset = generateKeySet(n)
     # # img_ideal = ampDisReversion(dist_ideal, keyset, sqSum, shots, n)
@@ -202,8 +246,8 @@ if __name__ == '__main__':
     #
     # print(dist_noise.keys())
     # print(dist_ideal.keys())
-    plot_distribution(dist_ideal, title="Ideal Distribution")
-    plot_distribution(dist_noise, title="Noise Distribution")
+    # plot_distribution(dist_ideal, title="Ideal Distribution")
+    # plot_distribution(dist_noise, title="Noise Distribution")
     #
     # # plotCompareDistribution(keyset, dist_ideal, dist_noise, ['Ideal', 'Noise Embedded'])
     plt.show()

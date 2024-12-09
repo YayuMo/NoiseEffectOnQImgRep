@@ -158,6 +158,8 @@ def plotCompareDistribution(keyset, dist1, dist2, labels):
     plt.grid(which='major', axis='y', zorder=0, linestyle='--')
     plt.show()
 
+# image Fourier Transform
+
 
 if __name__ == '__main__':
     image1 = Image.open('result/AmpEn_AmpDam/Encoded0.jpg')
