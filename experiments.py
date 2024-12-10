@@ -272,6 +272,11 @@ def experiments(experSettings):
                 'param': param
             })
 
+    # overall diversity
+    avgMSE, avgSSIM, weightedDiv = overallPerformanceEval(imgDictList)
+    print('The average MSE of this model is {:.3f}.'.format(avgMSE))
+    print('The average SSIM of this model is {:.3f}.'.format(avgSSIM))
+    print('The Weighted Diversity of this model is {:.3f}.'.format(weightedDiv))
 
     return imgDictList,imgDiffList
 
@@ -279,8 +284,8 @@ if __name__ == '__main__':
     experiment_settings_AMP = {
         'encoding': 'Amplitude Encoding',
         'noiseModel': 'Amplitude Damping',
-        # 'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
-        'modelParams': [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+        'modelParams': [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
+        # 'modelParams': [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
         'shots': 20000,
         'resize': 32,
         'originalImgPath': IMG_PATH,

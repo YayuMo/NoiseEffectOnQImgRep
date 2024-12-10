@@ -56,12 +56,12 @@ def constructAmplitudeDampingNoiseModel(param_meas, qb_nums, rand):
             noise_model.add_quantum_error(qerror_meas, 'measure', [sample])
         return noise_model
     else:
-        noise_model.add_all_qubit_quantum_error(qerror_meas, "reset")
-        # noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
-        noise_model.add_all_qubit_quantum_error(qerror_meas, ['u1', 'u2', 'u3'])
-        error_gate1 = pauli_error([("X", param_meas), ("I", 1 - param_meas)])
-        error_gate2 = error_gate1.tensor(error_gate1)
-        noise_model.add_all_qubit_quantum_error(error_gate2, ["cx"])
+        # noise_model.add_all_qubit_quantum_error(qerror_meas, "reset")
+        noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
+        # noise_model.add_all_qubit_quantum_error(qerror_meas, ['u1', 'u2', 'u3'])
+        # error_gate1 = pauli_error([("X", param_meas), ("I", 1 - param_meas)])
+        # error_gate2 = error_gate1.tensor(error_gate1)
+        # noise_model.add_all_qubit_quantum_error(error_gate2, ["cx"])
         return noise_model
 
 # Phase Damping Model on phase gate

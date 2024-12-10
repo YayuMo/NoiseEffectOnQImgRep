@@ -110,7 +110,7 @@ def plotEvalCurve(imgDictList):
     plt.savefig('result/eval.png')
     plt.show()
 
-
+# auto label
 def autolabel(rects, ax):
     """Attach a text label above each bar in *rects*, displaying its height."""
     for rect in rects:
@@ -120,6 +120,25 @@ def autolabel(rects, ax):
                     xytext=(0, 3),  # 3 points vertical offset
                     textcoords="offset points",
                     ha='center', va='bottom')
+
+# overall evaluation -- average SSIM, MSE, Weighted Diverse
+def overallPerformanceEval(imgDictList):
+    params = []
+    mses = []
+    ssims = []
+    for i in range(2, len(imgDictList)):
+        params.append(imgDictList[i]['param'])
+        mses.append(imgDictList[i]['mse'])
+        ssims.append(imgDictList[i]['ssim'])
+    n = len(params)
+    sumList = []
+    for i in range(len(params)):
+        sumList.append(math.sqrt((ssims[i] * (10 ** (3)) - mses[i] * (10 ** (-2))) ** 2) * params[i])
+
+    avgMSE = sum(mses) / n
+    avgSSIM = sum(ssims) / n
+    weightedDiv = sum(sumList) / n
+    return avgMSE, avgSSIM, weightedDiv
 
 # plot comparison distribution
 def plotCompareDistribution(keyset, dist1, dist2, labels):
