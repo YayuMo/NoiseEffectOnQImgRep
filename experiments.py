@@ -26,6 +26,7 @@ def experiments(experSettings):
         'img_path': experSettings['originalImgPath'],
         'title': 'Original'
     }]
+    # Amplitude Encoding Experiments
     if experSettings['encoding'] == 'Amplitude Encoding':
         # create circuit
         qc, sqSum, n = amplitudeEncoding(vec)
@@ -85,6 +86,7 @@ def experiments(experSettings):
             })
         # print(imgDiffList)
 
+    # MCRQI Experiments
     elif experSettings['encoding'] == 'MCRQI':
         img = imageOpen(
             imagePath=IMG_PATH,
@@ -148,6 +150,7 @@ def experiments(experSettings):
 
         pass
 
+    # FRQI Experiments
     elif experSettings['encoding'] == 'FRQI':
         img = imageOpen(
             imagePath=IMG_PATH,
@@ -208,6 +211,7 @@ def experiments(experSettings):
                 'param': param
             })
 
+    # NEQR Experiments
     elif experSettings['encoding'] == 'NEQR':
         img = imageOpen(
             imagePath=IMG_PATH,

@@ -12,7 +12,7 @@ def randomQubitSeriesGenerator(per, num):
     return res
 
 
-def constructBitFlipNoiseModel(param_bf):
+def constructBitFlipNoiseModel(param_bf, base):
     # params
     # p_reset = param_bf
     # p_meas = param_bf
