@@ -4,7 +4,7 @@ from qiskit_aer import Aer, AerSimulator
 from noise_model import *
 
 # construct backend
-def constructBackend(method, params, qb_nums):
+def constructBackend(method, params, qb_nums, instructions):
     if (method == 'statevector'):
         # ideal statevector simulator
         return Aer.get_backend('statevector_simulator')
@@ -19,7 +19,7 @@ def constructBackend(method, params, qb_nums):
         noise_model = constructBitFlipNoiseModel(params)
         return AerSimulator(noise_model = noise_model)
     elif (method == 'Amplitude Damping'):
-        noise_model = constructAmplitudeDampingNoiseModel(params, qb_nums, False)
+        noise_model = constructAmplitudeDampingNoiseModel(params, qb_nums, False, instructions)
         return AerSimulator(noise_model = noise_model)
     elif (method == 'Depolarization'):
         noise_model = constructDepolarizationNoiseModel(params)

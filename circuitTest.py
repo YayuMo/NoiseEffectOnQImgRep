@@ -16,7 +16,7 @@ if __name__ == '__main__':
     qc = qramEncoding(imgArr)
     shots = 20000
     # qc.draw(output='mpl')
-    sim = constructBackend('stabilizer', 0, qc.num_qubits)
+    sim = constructBackend('stabilizer', 0, qc.num_qubits, [])
     dist = simulate(qc, shots=shots, backend=sim)
     plot_distribution(dist)
     # img = distributedBasisSimulation(imgArr, 2, shots, sim)

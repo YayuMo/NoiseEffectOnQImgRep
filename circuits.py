@@ -222,7 +222,7 @@ if __name__ == '__main__':
     # # param_phase = 0.5 # phase damping parameter
     param_bf = 0.5
     # # # # get_simulator
-    ideal_sim = constructBackend('qasm', 0, qc.num_qubits)
+    ideal_sim = constructBackend('qasm', 0, qc.num_qubits, [])
     # noise_sim = constructBackend('Depolarization', param_dep)
     # noise_sim = constructBackend('Amplitude Damping', param_meas, qc.num_qubits)
     # noise_sim = constructBackend('Phase Damping', param_phase)

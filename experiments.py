@@ -1,4 +1,7 @@
 from PIL import Image
+from fontTools.ttLib.tables.ttProgram import instructions
+from qiskit.circuit.library.standard_gates.equivalence_library import instr
+
 from imageUtil import *
 from generalImageRepresentation import *
 from circuits import amplitudeEncoding, simulate
@@ -32,7 +35,7 @@ def experiments(experSettings):
         qc, sqSum, n = amplitudeEncoding(vec)
         keySet = generateKeySet(n)
         # build ideal simulator
-        ideal_sim = constructBackend('statevector', 0, n)
+        ideal_sim = constructBackend('statevector', 0, n, [])
         distIdeal = simulate(qc, shots, ideal_sim)
         imgEncoded = ampDisReversion(distIdeal, keySet, sqSum, shots, n)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
@@ -48,7 +51,7 @@ def experiments(experSettings):
 
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
-            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
+            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n, instructions=experSettings['instructions'])
             dist = simulate(qc, shots, noise_sim)
             imgProcessed = ampDisReversion(dist, keySet, sqSum, shots, n)
             imgProcessedPath = imageSave(
@@ -94,7 +97,7 @@ def experiments(experSettings):
             cmap='RGB'
         )
         qc, n = MCRQI(img)
-        ideal_sim = constructBackend('aer', 0, n)
+        ideal_sim = constructBackend('aer', 0, n, [])
         distIdeal = simulate(qc, shots, ideal_sim)
         imgEncoded = Rev_MCRQI(img, distIdeal, to_print=False)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
@@ -110,7 +113,7 @@ def experiments(experSettings):
 
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
-            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
+            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n, instructions=experSettings['instructions'])
             dist = simulate(qc, shots, noise_sim)
             imgProcessed = Rev_MCRQI(img, dist, to_print=False)
             # print(type(imgProcessed))
@@ -158,7 +161,7 @@ def experiments(experSettings):
             cmap='L'
         )
         qc, n = FRQI(img)
-        ideal_sim = constructBackend('aer', 0, n)
+        ideal_sim = constructBackend('aer', 0, n, [])
         distIdeal = simulate(qc, shots, ideal_sim)
         imgEncoded = Rev_FRQI(img, distIdeal)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
@@ -174,7 +177,7 @@ def experiments(experSettings):
 
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
-            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
+            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n,instructions=experSettings['instructions'])
             dist = simulate(qc, shots, noise_sim)
             imgProcessed = Rev_FRQI(img, dist)
             imgProcessedPath = imageSave(
@@ -219,7 +222,7 @@ def experiments(experSettings):
             cmap='L'
         )
         qc,n = NEQR(img)
-        ideal_sim = constructBackend('aer', 0, n)
+        ideal_sim = constructBackend('aer', 0, n, [])
         distIdeal = simulate(qc, shots, ideal_sim)
         imgEncoded = Rev_NEQR(img, distIdeal)
         encodedImgPath = imageSave(imgEncoded, 'Encoded', result_home, params=0)
@@ -235,7 +238,7 @@ def experiments(experSettings):
 
         # experiment on noise simulator
         for param in tqdm(experSettings['modelParams']):
-            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n)
+            noise_sim = constructBackend(method=experSettings['noiseModel'], params = param, qb_nums=n, instructions=experSettings['instructions'])
             dist = simulate(qc, shots, noise_sim)
             imgProcessed = Rev_NEQR(img, dist)
             imgProcessedPath = imageSave(
@@ -290,6 +293,8 @@ if __name__ == '__main__':
         'resize': 32,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/AmpEn_AmpDam/',
+        'instructions': ['measure']
+        # 'instructions': ['u1, u2, u3']
     }
 
     experiment_settings_MCRQI = {
@@ -300,6 +305,7 @@ if __name__ == '__main__':
         'resize': 16,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/MCRQI_AmpDam/',
+        'instructions': ['measure']
     }
 
     experiment_settings_FRQI = {
@@ -310,6 +316,7 @@ if __name__ == '__main__':
         'resize': 16,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/FRQI_AmpDam/',
+        'instructions': ['measure']
     }
 
     experiment_settings_NEQR = {
@@ -320,6 +327,7 @@ if __name__ == '__main__':
         'resize': 4,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/NEQR_AmpDam/',
+        'instructions': ['measure']
     }
 
     imgDictList,imgDiffList = experiments(experiment_settings_AMP)
