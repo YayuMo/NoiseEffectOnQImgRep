@@ -11,8 +11,8 @@ def randomQubitSeriesGenerator(per, num):
     res = random.sample(ls, n)
     return res
 
-
-def constructBitFlipNoiseModel(param_bf, base):
+# Bit Flip gate based
+def constructBitFlipNoiseModel(param_bf):
     # params
     # p_reset = param_bf
     # p_meas = param_bf
@@ -33,7 +33,22 @@ def constructBitFlipNoiseModel(param_bf, base):
 
     return noise_bit_flip
 
-# Depolarization Model on X-gates or qubit
+# Phase Flip gate based
+def constructPhaseFlipNoiseModel(param_pf):
+    p_gate1 = param_pf
+    error_gate1 = pauli_error([('Z', p_gate1), ('I', 1 - p_gate1)])
+    error_gate2 = error_gate1.tensor(error_gate1)
+
+    # Add errors to noise model
+    noise_phase_flip = NoiseModel()
+    # noise_bit_flip.add_all_qubit_quantum_error(error_reset, "reset")
+    # noise_bit_flip.add_all_qubit_quantum_error(error_meas, "measure")
+    noise_phase_flip.add_all_qubit_quantum_error(error_gate1, ["u1", "u2", "u3"])
+    noise_phase_flip.add_all_qubit_quantum_error(error_gate2, ["cz", "cx"])
+
+    return noise_phase_flip
+
+# Depolarization Model on X-gates or qubit, gate based
 def constructDepolarizationNoiseModel(param_dep):
     # construct error
     qerror_dep = depolarizing_error(param_dep, 1)
@@ -57,7 +72,8 @@ def constructAmplitudeDampingNoiseModel(param_meas, qb_nums, rand):
         return noise_model
     else:
         # noise_model.add_all_qubit_quantum_error(qerror_meas, "reset")
-        noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
+        # noise_model.add_all_qubit_quantum_error(qerror_meas, "measure")
+        noise_model.add_quantum_error(qerror_meas, 'measure', [9])
         # noise_model.add_all_qubit_quantum_error(qerror_meas, ['u1', 'u2', 'u3'])
         # error_gate1 = pauli_error([("X", param_meas), ("I", 1 - param_meas)])
         # error_gate2 = error_gate1.tensor(error_gate1)
