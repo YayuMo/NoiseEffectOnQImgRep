@@ -281,6 +281,11 @@ def experiments(experSettings):
     print('The average SSIM of this model is {:.3f}.'.format(avgSSIM))
     print('The Weighted Diversity of this model is {:.3f}.'.format(weightedDiv))
 
+    # plot and save result
+    imgPlot(imgDictList, 'out', path=experSettings['home_path'])
+    imgPlot(imgDiffList, 'diff', path=experSettings['home_path'])
+    plotEvalCurve(imgDictList, path=experSettings['home_path'])
+
     return imgDictList,imgDiffList
 
 if __name__ == '__main__':
@@ -293,8 +298,8 @@ if __name__ == '__main__':
         'resize': 32,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/AmpEn_AmpDam/',
-        'instructions': ['measure']
-        # 'instructions': ['u1, u2, u3']
+        # 'instructions': ['measure']
+        'instructions': ['u1, u2, u3']
     }
 
     experiment_settings_MCRQI = {
@@ -305,7 +310,8 @@ if __name__ == '__main__':
         'resize': 16,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/MCRQI_AmpDam/',
-        'instructions': ['measure']
+        # 'instructions': ['measure']
+        'instructions': ['u1, u2, u3']
     }
 
     experiment_settings_FRQI = {
@@ -331,9 +337,7 @@ if __name__ == '__main__':
     }
 
     imgDictList,imgDiffList = experiments(experiment_settings_AMP)
-    imgPlot(imgDictList, 'out')
-    imgPlot(imgDiffList, 'diff')
-    plotEvalCurve(imgDictList)
+
 
 
 

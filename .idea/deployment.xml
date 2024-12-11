@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="smu_hpc" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="yayu_hpc" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="smu_hpc">
+      <paths name="yayu_hpc">
         <serverdata>
           <mappings>
-            <mapping deploy="/PyCharmWorkSpace/NoiseEffectOnQImgRep" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
