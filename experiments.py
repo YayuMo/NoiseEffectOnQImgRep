@@ -738,7 +738,7 @@ if __name__ == '__main__':
         # 'instructions': ['measure']
     }
 
-    imgDictList,imgDiffList = experiments(experiment_settings_Basis)
+    imgDictList,imgDiffList = experiments(experiment_settings_NEQR)
 
 
 
