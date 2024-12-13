@@ -93,7 +93,7 @@ def BRQI(image):
     return qc
 
 # BRQI Rev
-def Rev_BRQI(image, counts):
+def Rev_BRQI(image, counts, qc):
     out_pixels = []
     w_bits = int(np.ceil(math.log(image.shape[1], 2)))
     h_bits = int(np.ceil(math.log(image.shape[0], 2)))
@@ -603,9 +603,9 @@ def Rev_QSMC(image, counts):
             # classical_coords.append(coord)
             print("ZeroDivisionError")
     classical_colors = np.interp(classical_colors, (0, np.pi / 2), (0, 256)).astype(int)
-    print('the meauserd colors are \n {} \n the input colors are \n {}'.format(classical_colors, im_list))
+    # print('the meauserd colors are \n {} \n the input colors are \n {}'.format(classical_colors, im_list))
     classical_coords = np.interp(classical_coords, (0, np.pi / 2), (0, len(im_list))).astype(int)
-    print('the meauserd coordinates are \n {}'.format(classical_coords))
+    # print('the meauserd coordinates are \n {}'.format(classical_coords))
     output_im = classical_colors.reshape(image.shape)
     return output_im
 

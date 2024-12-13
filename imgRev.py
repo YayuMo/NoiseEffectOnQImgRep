@@ -32,7 +32,7 @@ def angleDisReversion(dist, imgArr, shots, reshape):
     for item in dist:
         for i, bit in enumerate(item):
             if bit == '0':
-                print(dist[item])
+                # print(dist[item])
                 pixels[i] += dist[item]
     # print(pixels)
     size = int(math.sqrt(len(imgArr)))

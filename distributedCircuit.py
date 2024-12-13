@@ -14,7 +14,7 @@ def distributedAngleSimulation(imgArr, partSize, shots, sim):
     partNum = int(len(imgArr) / partSize)
     img = imgArr.reshape((partNum, partSize))
     processedImg = []
-    for arr in tqdm(img):
+    for arr in img:
         qc = angleEncodingCircuit(arr)
         dist = simulate(qc, shots, sim)
         img = angleDisReversion(dist, arr, shots, reshape = False)

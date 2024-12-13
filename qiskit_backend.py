@@ -1,3 +1,4 @@
+from qiskit.circuit.library.standard_gates.equivalence_library import instr
 from qiskit_ibm_runtime import QiskitRuntimeService
 from qiskit_aer import Aer, AerSimulator
 
@@ -22,7 +23,7 @@ def constructBackend(method, params, qb_nums, instructions):
         noise_model = constructAmplitudeDampingNoiseModel(params, qb_nums, False, instructions)
         return AerSimulator(noise_model = noise_model)
     elif (method == 'Depolarization'):
-        noise_model = constructDepolarizationNoiseModel(params)
+        noise_model = constructDepolarizationNoiseModel(params, instructions)
         return AerSimulator(noise_model = noise_model)
     elif (method == 'Phase Damping'):
         noise_model = constructPhaseDampingNoiseModel(params)

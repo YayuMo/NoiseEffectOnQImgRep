@@ -52,14 +52,27 @@ def imageEval(imgpath1, imgpath2):
     return mse, sim
 
 # save image
-def imageSave(img, prefix, resultHome, params):
+def imageSave(img, prefix, resultHome, params, imgMode):
     if not os.path.exists(resultHome):
         os.makedirs(resultHome)
-    img1 = Image.fromarray(img.astype(np.uint8))
-    img2 = img1.convert('RGB')
-    file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
-    img2.save(file_path)
+
+    # print(type(img))
+    # img1 = Image.fromarray(img)
+
+    if imgMode=='RGB':
+        file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
+        img1 = Image.fromarray(img.astype(np.uint8))
+        img2 = img1.convert('RGB')
+        img2.save(file_path)
+    # plt.imsave(file_path, img, cmap='rgb')
+    else:
+        file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'
+        cv2.imwrite(file_path, img)
+
     return file_path
+
+
+
     # if img.mode == "F":
     #     img = img.convert('RGB')
     #     file_path = resultHome + prefix + str(int(params * 100)) + '.jpg'

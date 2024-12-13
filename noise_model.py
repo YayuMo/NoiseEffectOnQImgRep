@@ -1,6 +1,7 @@
 # Import from Qiskit Aer noise module
 import random
 
+from fontTools.ttLib.tables.ttProgram import instructions
 from qiskit_aer.noise import amplitude_damping_error, NoiseModel, QuantumError, ReadoutError, pauli_error, depolarizing_error, thermal_relaxation_error, phase_damping_error, phase_amplitude_damping_error
 
 def randomQubitSeriesGenerator(per, num):
@@ -49,13 +50,13 @@ def constructPhaseFlipNoiseModel(param_pf):
     return noise_phase_flip
 
 # Depolarization Model on X-gates or qubit, gate based
-def constructDepolarizationNoiseModel(param_dep):
+def constructDepolarizationNoiseModel(param_dep, instructions):
     # construct error
     qerror_dep = depolarizing_error(param_dep, 1)
 
     # build noise model
     noise_model = NoiseModel()
-    noise_model.add_all_qubit_quantum_error(qerror_dep, ['x'])
+    noise_model.add_all_qubit_quantum_error(qerror_dep, instructions=instructions)
 
     return noise_model
 

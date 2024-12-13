@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="8f800b23-1e95-4b46-8bfb-1bbf6abc16ec" name="yayu_hpc">
-        <fileTransfer rootFolder="/users/yayum/PyCharmWorkSpace/NoiseEffectOnQImgRep" accessType="SFTP" host="yayum@m3.smu.edu" port="22" sshConfigId="5881113f-4b8f-4e6a-9e01-e6d0dcb27b91" sshConfig="yayum@yayum@m3.smu.edu:22 password">
+        <fileTransfer rootFolder="/users/yayum" accessType="SFTP" host="yayum@m3.smu.edu" port="22" sshConfigId="5881113f-4b8f-4e6a-9e01-e6d0dcb27b91" sshConfig="yayum@yayum@m3.smu.edu:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
