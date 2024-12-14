@@ -64,13 +64,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -131,13 +132,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -196,13 +198,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -261,13 +264,14 @@ def experiments(experSettings):
                 imgMode='RGB'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -326,13 +330,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -389,13 +394,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -453,13 +459,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -518,13 +525,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -583,13 +591,14 @@ def experiments(experSettings):
                 imgMode='Gray'
             )
 
-            mse, ssim = imageEval(encodedImgPath, imgProcessedPath)
+            mse, ssim, psnr = imageEval(encodedImgPath, imgProcessedPath)
             imgDictList.append({
                 'img_path': imgProcessedPath,
                 'title': 'param = ' + str(param),
                 'param': param,
                 'mse': mse,
-                'ssim': ssim
+                'ssim': ssim,
+                'psnr': psnr
             })
 
             # create diff images
@@ -613,9 +622,10 @@ def experiments(experSettings):
 
 
     # overall diversity
-    avgMSE, avgSSIM, weightedDiv = overallPerformanceEval(imgDictList)
+    avgMSE, avgSSIM, avgPSNR, weightedDiv = overallPerformanceEval(imgDictList)
     print('The average MSE of this model is {:.3f}.'.format(avgMSE))
     print('The average SSIM of this model is {:.3f}.'.format(avgSSIM))
+    print('The average PSNR of this model is {:.3f}.'.format(avgPSNR))
     print('The Weighted Diversity of this model is {:.3f}.'.format(weightedDiv))
 
     # plot and save result
@@ -636,8 +646,8 @@ if __name__ == '__main__':
         'resize': 32,
         'originalImgPath': IMG_PATH,
         'home_path': 'result/AmpEn_AmpDam/',
-        # 'instructions': ['measure']
-        'instructions': ['u1', 'u2', 'u3']
+        'instructions': ['measure']
+        # 'instructions': ['u1', 'u2', 'u3']
     }
 
     experiment_settings_Basis = {
@@ -738,7 +748,7 @@ if __name__ == '__main__':
         # 'instructions': ['measure']
     }
 
-    imgDictList,imgDiffList = experiments(experiment_settings_NEQR)
+    imgDictList,imgDiffList = experiments(experiment_settings_AMP)
 
 
 

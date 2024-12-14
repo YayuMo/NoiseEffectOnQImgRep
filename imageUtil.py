@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 from matplotlib import pyplot as plt
 from skimage.metrics import structural_similarity as ssim
+from skimage.metrics import peak_signal_noise_ratio as psnr
 
 import cv2
 
@@ -48,8 +49,9 @@ def imageEval(imgpath1, imgpath2):
     mse = np.sum((img1.astype("float") - img2.astype("float")) ** 2)
     mse /= float(img1.shape[0] * img1.shape[1])
     sim = ssim(img1, img2)
+    psnrs = psnr(img1, img2)
     # print(mse, sim)
-    return mse, sim
+    return mse, sim, psnrs
 
 # save image
 def imageSave(img, prefix, resultHome, params, imgMode):
@@ -139,10 +141,12 @@ def overallPerformanceEval(imgDictList):
     params = []
     mses = []
     ssims = []
+    psnrs = []
     for i in range(2, len(imgDictList)):
         params.append(imgDictList[i]['param'])
         mses.append(imgDictList[i]['mse'])
         ssims.append(imgDictList[i]['ssim'])
+        psnrs.append(imgDictList[i]['psnr'])
     n = len(params)
     sumList = []
     for i in range(len(params)):
@@ -150,8 +154,9 @@ def overallPerformanceEval(imgDictList):
 
     avgMSE = sum(mses) / n
     avgSSIM = sum(ssims) / n
+    avgPSNR = sum(psnrs) / n
     weightedDiv = sum(sumList) / n
-    return avgMSE, avgSSIM, weightedDiv
+    return avgMSE, avgSSIM, avgPSNR, weightedDiv
 
 # plot comparison distribution
 def plotCompareDistribution(keyset, dist1, dist2, labels):
